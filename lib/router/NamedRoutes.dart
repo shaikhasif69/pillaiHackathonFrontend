@@ -9,4 +9,6 @@ class StaffRoutes {
 class CommonRoutes {
   static String onBoardScreen = "/onBoardUser";
   static String splashScreen = "/splashScreen";
+  static String askLoginScreen = "/askLogin";
+  static String collegeIdLogin = "/collegeIdLogin";
 }

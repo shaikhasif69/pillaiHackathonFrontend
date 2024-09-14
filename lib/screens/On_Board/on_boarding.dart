@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_board1.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_board2.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_board3.dart';
@@ -70,12 +72,14 @@ class _on_boardingState extends State<on_boarding> {
               onLastpage
                   ? GestureDetector(
                       onTap: () {
+                        print("hello!");
+                        
                         //      showCustomDialog(
                         //   context,
                         //   onValue: (_) {},
                         // );
-                        // GoRouter.of(context)
-                        //     .pushNamed(CommonRoutes.onBoardScreen);
+                        GoRouter.of(context)
+                            .pushNamed(CommonRoutes.askLoginScreen);
                         // Navigator.push(
                         //     context,
                         //     PageTransition(

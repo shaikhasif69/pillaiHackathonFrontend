@@ -27,11 +27,11 @@ class on_board4 extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Text(
-            "UPLOAD YOUR DETAILS",
-            style: GoogleFonts.inter(
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
-                color: const Color.fromARGB(255, 37, 37, 37)),
+            "LEAR, CONNECT & SHARE",
+           style: GoogleFonts.agdasima(
+                          fontSize: 28,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
           ),
         )
       ]),
