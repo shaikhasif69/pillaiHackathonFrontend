@@ -63,7 +63,7 @@ class _on_boardingState extends State<on_boarding> {
             children: [
               GestureDetector(
                   onTap: () {
-                    _controller.jumpToPage(2);
+                    _controller.jumpToPage(3);
                   },
                   child: Text(
                     "Skip",

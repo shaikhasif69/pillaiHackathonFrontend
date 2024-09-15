@@ -1,5 +1,6 @@
 class StudentsRoutes {
   static String signUp = "/student/signUp";
+  static String studentSetup = "/student/studentSetup";
 }
 
 class StaffRoutes {
