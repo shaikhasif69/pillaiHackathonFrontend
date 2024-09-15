@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/widgets/input_text_container.dart';
 
 class CollegeIdLoginPage extends StatefulWidget {
@@ -77,6 +79,7 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
               ),
               GestureDetector(
                 onTap: (){
+                  GoRouter.of(context).pushNamed(StudentsRoutes.studentSetup);
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.06,

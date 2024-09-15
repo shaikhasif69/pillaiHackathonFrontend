@@ -1,5 +1,6 @@
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
+import 'package:pillai_hackcelestial/screens/Students/student_form.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
 import 'package:pillai_hackcelestial/screens/college_id_login.dart';
 import 'package:pillai_hackcelestial/screens/splash_screen.dart';
@@ -44,7 +45,20 @@ class MyGoRouter {
         path: CommonRoutes.collegeIdLogin,
         name: CommonRoutes.collegeIdLogin,
         builder: (context, state) => CollegeIdLoginPage(),
+      ),
+
+
+
+      // Students Routes : 
+
+    GoRoute(
+        path: StudentsRoutes.studentSetup,
+        name: StudentsRoutes.studentSetup,
+        builder: (context, state) => StudentForm(),
       )
+
+
+
       // GoRoute(
       //   path: CommonRoutes.homeScreen,
       //   name: CommonRoutes.homeScreen,
