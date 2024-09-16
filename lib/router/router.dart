@@ -1,9 +1,11 @@
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
-import 'package:pillai_hackcelestial/screens/Students/student_form.dart';
+import 'package:pillai_hackcelestial/screens/Students/multi_step_form.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
 import 'package:pillai_hackcelestial/screens/college_id_login.dart';
+import 'package:pillai_hackcelestial/screens/signup_page.dart';
 import 'package:pillai_hackcelestial/screens/splash_screen.dart';
+import 'package:pillai_hackcelestial/screens/userOtpForm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -47,17 +49,25 @@ class MyGoRouter {
         builder: (context, state) => CollegeIdLoginPage(),
       ),
 
+      GoRoute(
+        path: CommonRoutes.signUpScreen,
+        name: CommonRoutes.signUpScreen,
+        builder: (context, state) => SignUpPage(),
+      ),
 
+      // GoRoute(
+      //   path: CommonRoutes.signUpScreen,
+      //   name: CommonRoutes.signUpScreen,
+      //   builder: (context, state) => SignUpPage(),
+      // ),
 
-      // Students Routes : 
+      // Students Routes :
 
-    GoRoute(
+      GoRoute(
         path: StudentsRoutes.studentSetup,
         name: StudentsRoutes.studentSetup,
-        builder: (context, state) => StudentForm(),
+        builder: (context, state) => StudentMultiStepForm(),
       )
-
-
 
       // GoRoute(
       //   path: CommonRoutes.homeScreen,

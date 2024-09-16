@@ -11,5 +11,8 @@ class CommonRoutes {
   static String onBoardScreen = "/onBoardUser";
   static String splashScreen = "/splashScreen";
   static String askLoginScreen = "/askLogin";
+  static String signUpScreen = "/signUpScreen";
   static String collegeIdLogin = "/collegeIdLogin";
+  static String takeStudentInfo = "/takeStudentInfo";
+  static String takeFacultyInfo = "/takeFacultyInfo";
 }

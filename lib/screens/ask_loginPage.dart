@@ -18,10 +18,10 @@ class AskLoginpage extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height:  MediaQuery.of(context).size.height * 0.09,
+              height: MediaQuery.of(context).size.height * 0.09,
             ),
             SizedBox(
-              height:  MediaQuery.of(context).size.height * 0.32,
+              height: MediaQuery.of(context).size.height * 0.32,
               width: double.infinity,
               child: Image.asset(
                 "assets/images/ACADEMICVERSE.png",
@@ -30,7 +30,7 @@ class AskLoginpage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                GoRouter.of(context).pushNamed(CommonRoutes.collegeIdLogin);
+                GoRouter.of(context).pushNamed(CommonRoutes.signUpScreen);
               },
               child: Container(
                 width: screenWidth * 0.7,
@@ -46,7 +46,7 @@ class AskLoginpage extends StatelessWidget {
                       height: 30,
                     ),
                     Text(
-                      "Sign in with College Id",
+                      "Sign Up with College Id",
                       style: GoogleFonts.abyssinicaSil(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     )
@@ -55,7 +55,7 @@ class AskLoginpage extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             Text(
               "Not a current Student or Faculty? ",
@@ -76,7 +76,7 @@ class AskLoginpage extends StatelessWidget {
               height: screenHeight * 0.04,
             ),
             GestureDetector(
-              onTap: (){
+              onTap: () {
                 print("Navigate to the Alumni Page Further Page");
               },
               child: Container(
@@ -109,31 +109,37 @@ class AskLoginpage extends StatelessWidget {
                 ),
               ),
             ),
-             SizedBox(height:  MediaQuery.of(context).size.height * 0.08,),
-            const Divider(thickness: 1,), 
-            const SizedBox(height: 10,),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.08,
+            ),
+            const Divider(
+              thickness: 1,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                 Text(
-                      "Already have an account? ",
-                      style: GoogleFonts.abyssinicaSil(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.black),
-                    ),
-                     GestureDetector(
-                      onTap: (){
-                        print("navigate to the sign In Page directly!");
-                      },
-                       child: Text(
-                        "Sign In.",
-                        style: GoogleFonts.abyssinicaSil(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black),
-                                           ),
-                     ),
+                Text(
+                  "Already have an account? ",
+                  style: GoogleFonts.abyssinicaSil(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(CommonRoutes.collegeIdLogin);
+                  },
+                  child: Text(
+                    "Sign In.",
+                    style: GoogleFonts.abyssinicaSil(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                ),
               ],
             )
           ],

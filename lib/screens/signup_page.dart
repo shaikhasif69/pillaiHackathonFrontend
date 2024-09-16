@@ -3,23 +3,55 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:pillai_hackcelestial/screens/userOtpForm.dart';
+import 'package:pillai_hackcelestial/services/auth_services.dart';
 import 'package:pillai_hackcelestial/widgets/input_text_container.dart';
 
-class CollegeIdLoginPage extends StatefulWidget {
-  const CollegeIdLoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<CollegeIdLoginPage> createState() => _CollegeIdLoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-TextEditingController collegeId = TextEditingController();
-TextEditingController password = TextEditingController();
+class _SignUpPageState extends State<SignUpPage> {
+  final AuthService _authService = AuthService();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
-class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
+  void _signup() async {
+    String email = _emailController.text;
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+
+    // Call the signup function from the service
+    final result = await _authService.signup(email, username, password);
+
+    if (result['success']) {
+      // Show OTP screen or success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'])),
+      );
+       Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => userOtpFormPage(email: _emailController.text),
+          ),
+        );
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'])),
+      );
+    }
+  }
+
   @override
   void initState() {
-    collegeId = TextEditingController();
-    password = TextEditingController();
+    _emailController = TextEditingController();
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
     super.initState();
   }
 
@@ -43,13 +75,18 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
                   fit: BoxFit.fitHeight,
                 ),
               ),
-                          InputTextContainer(
-                con: collegeId,
+              InputTextContainer(
+                con: _emailController,
                 label: "College ID",
               ),
               const SizedBox(height: 10),
               InputTextContainer(
-                con: password,
+                con: _usernameController,
+                label: "Username",
+              ),
+              const SizedBox(height: 10),
+              InputTextContainer(
+                con: _passwordController,
                 label: "Password",
                 isPassword: true,
               ),
@@ -72,13 +109,13 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
                   )
                 ],
               ),
-        
               const SizedBox(
                 height: 20,
               ),
               GestureDetector(
-                onTap: (){
-                  GoRouter.of(context).pushNamed(StudentsRoutes.studentSetup);
+                onTap: () {
+                  _signup();
+                  // GoRouter.of(context).pushNamed(StudentsRoutes.studentSetup);
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.06,
@@ -91,7 +128,7 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Log in",
+                          "Sign Up",
                           style: GoogleFonts.aBeeZee(
                               fontSize: 16,
                               fontStyle: FontStyle.italic,

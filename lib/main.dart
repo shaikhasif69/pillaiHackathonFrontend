@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:pillai_hackcelestial/provider/StudentForm.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:pillai_hackcelestial/router/router.dart';
 import 'package:pillai_hackcelestial/screens/splash_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:provider/provider.dart';
-
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (_) => StudentFormModel(), child: MyApp()));
+  runApp(ProviderScope(child: MyApp())); // Wrap MyApp with ProviderScope
 }
 
 class MyApp extends StatelessWidget {
@@ -21,6 +18,7 @@ class MyApp extends StatelessWidget {
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
         return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
