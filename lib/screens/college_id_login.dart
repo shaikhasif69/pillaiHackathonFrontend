@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:pillai_hackcelestial/services/auth_services.dart';
 import 'package:pillai_hackcelestial/widgets/input_text_container.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CollegeIdLoginPage extends StatefulWidget {
   const CollegeIdLoginPage({super.key});
@@ -12,14 +14,55 @@ class CollegeIdLoginPage extends StatefulWidget {
   State<CollegeIdLoginPage> createState() => _CollegeIdLoginPageState();
 }
 
-TextEditingController collegeId = TextEditingController();
-TextEditingController password = TextEditingController();
-
 class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
+  TextEditingController collegeId = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+  final AuthService _authService = AuthService();
+
+  void signIn() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    String email = collegeId.text.trim();
+    String password = passwordController.text.trim();
+
+    final response = await _authService.signIn(email, password);
+
+    setState(() {
+      isLoading = false;
+    });
+
+    if (response['success']) {
+      // Store authentication status
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('isLoggedIn', true);
+
+      // Navigate to respective home screen based on email type
+      if (email.contains('@student')) {
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => StudentHomeScreen()),
+        // );
+      } else {
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => FacultyHomeScreen()),
+        // );
+      }
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response['message'])),
+      );
+    }
+  }
+
   @override
   void initState() {
     collegeId = TextEditingController();
-    password = TextEditingController();
+    passwordController = TextEditingController();
     super.initState();
   }
 
@@ -43,13 +86,13 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
                   fit: BoxFit.fitHeight,
                 ),
               ),
-                          InputTextContainer(
+              InputTextContainer(
                 con: collegeId,
                 label: "College ID",
               ),
               const SizedBox(height: 10),
               InputTextContainer(
-                con: password,
+                con: passwordController,
                 label: "Password",
                 isPassword: true,
               ),
@@ -72,12 +115,11 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
                   )
                 ],
               ),
-        
               const SizedBox(
                 height: 20,
               ),
               GestureDetector(
-                onTap: (){
+                onTap: () {
                   GoRouter.of(context).pushNamed(StudentsRoutes.studentSetup);
                 },
                 child: Container(

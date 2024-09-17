@@ -67,7 +67,20 @@ class MyGoRouter {
         path: StudentsRoutes.studentSetup,
         name: StudentsRoutes.studentSetup,
         builder: (context, state) => StudentMultiStepForm(),
-      )
+      ),
+
+      GoRoute(
+        path: StudentsRoutes.studentHomePage,
+        name: StudentsRoutes.studentHomePage,
+        // builder: (context, state) => StudentMultiStepForm(),
+      ),
+
+      // faculty Routes :
+      GoRoute(
+        path: FacultyRoutes.facultyHomePage,
+        name: FacultyRoutes.facultyHomePage,
+        // builder: (context, state) => StudentMultiStepForm(),
+      ),
 
       // GoRoute(
       //   path: CommonRoutes.homeScreen,

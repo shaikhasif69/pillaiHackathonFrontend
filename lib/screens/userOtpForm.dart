@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
+import 'package:pillai_hackcelestial/models/faculty.dart';
+import 'package:pillai_hackcelestial/models/student.dart';
 import 'package:pillai_hackcelestial/screens/Students/multi_step_form.dart';
 import 'package:pillai_hackcelestial/services/auth_services.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class userOtpFormPage extends StatefulWidget {
   final String email;
@@ -63,21 +67,35 @@ class _userOtpFormPageState extends State<userOtpFormPage> {
     AuthService authService = AuthService(); // Create an instance of AuthService
 
   void verifyOTP() async {
-    setState(() {
-      isLoading = true;
-    });
+  setState(() {
+    isLoading = true;
+  });
 
-    String otp = otpController.text.trim();
+  String otp = otpController.text.trim();
 
-    final response = await authService.verifyOTP(widget.email, otp);
+  final response = await authService.verifyOTP(widget.email, otp);
 
-    setState(() {
-      isLoading = false;
-    });
+  setState(() {
+    isLoading = false;
+  });
 
-    if (response['success']) {
-      print("yeppo !");
-       if (widget.email.contains('@student')) {
+  if (response['success']) {
+    var user = response['user'];
+
+    // Check if the user is a student
+    if (widget.email.contains('@student')) {
+      final studentBox = Hive.box<Student>('studentsBox');
+      studentBox.put(user['id'], Student(
+        id: user['id'],
+        username: user['username'],
+        name: user['name'],
+        email: user['email'],
+        department: user['department'],
+        year: user['year'],
+        address: user['address'],
+        handicapped: user['handicapped'] ?? false,
+      ));
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -85,8 +103,19 @@ class _userOtpFormPageState extends State<userOtpFormPage> {
         ),
       );
     } else {
-      // Navigate to Faculty Multi-Step Form
-      print("Navigating to the Faculty multiStep Form");
+      // Save faculty info locally
+      final facultyBox = Hive.box<Faculty>('facultyBox');
+      facultyBox.put(user['id'], Faculty(
+        id: user['id'],
+        name: user['name'],
+        email: user['email'],
+        username: user['username'],
+        department: user['department'],
+        subjects: List<String>.from(user['subjects'] ?? []),
+        experience: user['experience'],
+        gender: user['gender'],
+      ));
+
       // Navigator.pushReplacement(
       //   context,
       //   MaterialPageRoute(
@@ -94,12 +123,19 @@ class _userOtpFormPageState extends State<userOtpFormPage> {
       //   ),
       // );
     }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response['message'])),
-      );
-    }
+
+    // Optionally save token and login state using SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('token', response['token']);
+    
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(response['message'])),
+    );
   }
+}
+
 
   @override
   Widget build(BuildContext context) {

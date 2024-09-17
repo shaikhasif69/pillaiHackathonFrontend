@@ -1,10 +1,14 @@
 class StudentsRoutes {
   static String signUp = "/student/signUp";
   static String studentSetup = "/student/studentSetup";
+  static String studentHomePage = "/student/studentHomePage";
+
 }
 
-class StaffRoutes {
-  static String signUp = "/staff/signUp";
+class FacultyRoutes {
+  static String signUp = "/faculty/signUp";
+  static String facultyHomePage = "/faculty/facultyHomePage";
+
 }
 
 class CommonRoutes {

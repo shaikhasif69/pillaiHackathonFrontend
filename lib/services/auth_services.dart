@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:pillai_hackcelestial/models/faculty.dart';
+import 'package:pillai_hackcelestial/models/student.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final String baseUrl = 'http://192.168.0.108:3000';
@@ -42,6 +46,77 @@ class AuthService {
       };
     }
   }
+
+  // sign in functino here ! 
+
+
+  Future<Map<String, dynamic>> signIn(String email, String password) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/signin'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        final body = jsonDecode(response.body);
+        final user = body['user'];
+        final token = body['token'];
+
+        // Save token to SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('authToken', token);
+
+        // Save user data to Hive
+        if (email.contains('@student')) {
+          var studentBox = await Hive.openBox<Student>('studentsBox');
+          studentBox.put(
+            'student',
+            Student(
+              id: user['_id'],
+              username: user['username'],
+              name: user['name'],
+              email: user['email'],
+              department: user['department'],
+              year: user['year'],
+              address: user['address'],
+              handicapped: user['handicapped'],
+            ),
+          );
+        } else {
+          var facultyBox = await Hive.openBox<Faculty>('facultyBox');
+          facultyBox.put(
+            'faculty',
+            Faculty(
+              id: user['_id'],
+              username: user['username'],
+              name: user['name'],
+              email: user['email'],
+              department: user['department'],
+              subjects: List<String>.from(user['subjects']),
+              experience: user['experience'],
+              gender: user['gender'],
+            ),
+          );
+        }
+
+        return {'success': true, 'user': user, 'token': token};
+      } else {
+        return {
+          'success': false,
+          'message': jsonDecode(response.body)['message'],
+        };
+      }
+    } catch (error) {
+      return {'success': false, 'message': 'An error occurred.'};
+    }
+  }
+  
 
   Future<Map<String, dynamic>> verifyOTP(String email, String otp) async {
     try {

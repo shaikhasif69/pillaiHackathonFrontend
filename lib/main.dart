@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
+import 'package:pillai_hackcelestial/models/faculty.dart';
+import 'package:pillai_hackcelestial/models/student.dart';
 import 'package:pillai_hackcelestial/router/router.dart';
 import 'package:pillai_hackcelestial/screens/splash_screen.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  // Register the adapters
+  Hive.registerAdapter(StudentAdapter());
+  Hive.registerAdapter(FacultyAdapter());
+  // Open boxes (for example, on app start)
+  await Hive.openBox<Student>('studentsBox');
+  await Hive.openBox<Faculty>('facultyBox');
   runApp(ProviderScope(child: MyApp())); // Wrap MyApp with ProviderScope
 }
 
