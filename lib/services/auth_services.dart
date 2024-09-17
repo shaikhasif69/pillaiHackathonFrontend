@@ -52,18 +52,22 @@ class AuthService {
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
     try {
+      print("getting data here: " + email + " " + password);
+      var temail = email.trim();
+      var tpassword = password.toString();
       final response = await http.post(
-        Uri.parse('$baseUrl/signin'),
+        Uri.parse('$baseUrl/users/signin'),
         headers: {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'email': email,
-          'password': password,
+          'email': temail,
+          'password': tpassword,
         }),
       );
 
       if (response.statusCode == 201) {
+        print("got and succesfful?");
         final body = jsonDecode(response.body);
         final user = body['user'];
         final token = body['token'];
@@ -80,12 +84,12 @@ class AuthService {
             Student(
               id: user['_id'],
               username: user['username'],
-              name: user['name'],
+              name: "",
               email: user['email'],
-              department: user['department'],
-              year: user['year'],
-              address: user['address'],
-              handicapped: user['handicapped'],
+              department: "",
+              year: "",
+              address: "",
+              handicapped: false,
             ),
           );
         } else {
@@ -107,6 +111,7 @@ class AuthService {
 
         return {'success': true, 'user': user, 'token': token};
       } else {
+        print("what is the issue???");
         return {
           'success': false,
           'message': jsonDecode(response.body)['message'],

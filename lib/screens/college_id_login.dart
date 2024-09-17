@@ -48,7 +48,8 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
         await prefs.setString('userType', 'faculty');
       }
     } else {
-      // Show error message
+      print("error bro error");
+      print("error : " + response['message']);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(response['message'])),
       );
@@ -116,7 +117,7 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  GoRouter.of(context).pushNamed(StudentsRoutes.studentSetup);
+                  signIn();
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.06,
