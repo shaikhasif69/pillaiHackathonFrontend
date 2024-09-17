@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
+import 'package:pillai_hackcelestial/models/student.dart';
 import 'package:pillai_hackcelestial/models/student_form_data.dart';
 import 'package:pillai_hackcelestial/provider/student_form.dart';
+import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/services/auth_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:developer' as developer;
 
 class StudentMultiStepForm extends ConsumerStatefulWidget {
   @override
@@ -13,8 +19,57 @@ class _StudentMultiStepFormState extends ConsumerState<StudentMultiStepForm> {
   int _currentStep = 0;
   bool isLoading = false;
   final AuthService _authService = AuthService();
+  String? studentId;
 
-  void submitForm(BuildContext context, WidgetRef ref, String userId) async {
+  @override
+  void initState() {
+    getStudentId();
+    checkIfFormFilled();
+    super.initState();
+  }
+
+  Future<void> getStudentId() async {
+    print("hello ??");
+    developer.log("hello");
+
+    var studentBox = await Hive.openBox<Student>('studentsBox');
+    if (studentBox.isNotEmpty) {
+      print("Student box keys: ${studentBox.keys}");
+    } else {
+      print("Student box is empty");
+    }
+   
+      String studentIdFromPrefs = studentBox.keys.first.toString();  // Example for retrieving the first key
+      var student = studentBox.get(studentIdFromPrefs);
+    if (student != null) {
+      developer.log("Student here: ${student.toString()}");
+      setState(() {
+        studentId = student.id;
+      });
+      developer.log("Student ID: $studentId");
+    } else {
+      print("Student is null");
+    }
+  }
+
+  // Check if the form has already been filled using SharedPreferences
+  Future<void> checkIfFormFilled() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool formFilled = prefs.getBool('formFilled') ?? false;
+
+    // If form is already filled, navigate directly to homepage
+    if (formFilled) {
+      GoRouter.of(context).pushNamed(StudentsRoutes.studentHomePage);
+    }
+  }
+
+  // Save form completion status to SharedPreferences
+  Future<void> saveFormCompletionStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('formFilled', true);
+  }
+
+  void submitForm(BuildContext context, WidgetRef ref) async {
     final formData = ref.read(formDataProvider);
 
     String academicStream = formData.academicStream ?? '';
@@ -34,30 +89,39 @@ class _StudentMultiStepFormState extends ConsumerState<StudentMultiStepForm> {
       isLoading = true;
     });
 
-    final response = await _authService.submitUserForm(
-      userId,
-      academicStream,
-      yearOfStudy,
-      academicInterests,
-      extracurricularInterests,
-      activityPreference,
-      timeCommitment,
-      communityEngagement,
-      communityType,
-      leadershipPreference,
-      longTermGoal,
-      collaborationPreference,
-    );
+    if (studentId != null) {
+      final response = await _authService.submitUserForm(
+        studentId!,
+        academicStream,
+        yearOfStudy,
+        academicInterests,
+        extracurricularInterests,
+        activityPreference,
+        timeCommitment,
+        communityEngagement,
+        communityType,
+        leadershipPreference,
+        longTermGoal,
+        collaborationPreference,
+      );
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
 
-    if (response['success']) {
-      print("Form submitted successfully!");
+      if (response['success']) {
+        // Save that the form has been filled and navigate to homepage
+        await saveFormCompletionStatus();
+        GoRouter.of(context).pushReplacement(StudentsRoutes.studentHomePage);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(response['message'])),
+        );
+      }
     } else {
+      // If studentId is null, handle error (you can show a snackbar or alert dialog here)
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response['message'])),
+        SnackBar(content: Text('Failed to get student ID')),
       );
     }
   }
@@ -93,11 +157,8 @@ class _StudentMultiStepFormState extends ConsumerState<StudentMultiStepForm> {
                   _currentStep += 1;
                 });
               } else {
-                final userId =
-                    '66e86a3b5c4cc31131f5ea59'; // Make sure to replace this with actual userId
-                submitForm(context, ref, userId);
+                submitForm(context, ref);
               }
-              // onSubmit(context, ref);
             },
             onStepCancel: () {
               if (_currentStep > 0) {

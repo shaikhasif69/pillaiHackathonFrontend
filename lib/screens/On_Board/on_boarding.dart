@@ -91,7 +91,7 @@ class _on_boardingState extends State<on_boarding> {
                         width: MediaQuery.of(context).size.width * 0.3,
                         decoration: BoxDecoration(
                             color: MyColors.ourPrimary,
-                            borderRadius: BorderRadius.circular(35)),
+                            borderRadius: BorderRadius.circular(15)),
                         child: Center(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -99,10 +99,10 @@ class _on_boardingState extends State<on_boarding> {
                               Text(
                                 "Done ",
                                 style: GoogleFonts.inter(
-                                    fontSize: 16.sp,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
-                                    letterSpacing: 1),
+                                    letterSpacing: 1)
                               ),
                               Container(
                                 height:

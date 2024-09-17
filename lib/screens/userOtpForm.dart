@@ -21,121 +21,86 @@ class _userOtpFormPageState extends State<userOtpFormPage> {
   final TextEditingController otpController = TextEditingController();
   final AuthService _authService = AuthService();
   bool isLoading = false;
-  // final UserService userService = UserService();
 
-  // void verifyOtp(BuildContext context) async {
-  //   try {
-  //     final response =
-  //         await userService.verifyOtp(widget.email, otpController.text);
-  //     if (response['response'] == 'Success') {
-  //       User user = User.fromJson(response['user']);
-  //       HiveUser hiveUser = HiveUser(
-  //         id: user.id,
-  //         firstName: user.firstName,
-  //         lastName: user.lastName,
-  //         address: user.address,
-  //         phone: user.phone,
-  //         email: user.email,
-  //         username: user.username,
-  //         profilePicture: user.profilePicture,
-  //         gender: user.gender,
-  //       );
-
-  //       final hiveService = HiveService();
-  //       await hiveService.saveUser(hiveUser);
-  //       final userProvider = Provider.of<UserProvider>(context, listen: false);
-  //       userProvider.setUser(User.fromJson(response['user']));
-  //       await _authService.storeLoginDetails(
-  //         'user',
-  //         response['token'] ?? '',
-  //         widget.email,
-  //       );
-  //       print('Navigating to home page...');
-  //       GoRouter.of(context).pushNamed(PatientRoutes.homePage);
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Invalid OTP')),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     print('Error during OTP verification: $e');
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('An error occurred. Please try again.')),
-  //     );
-  //   }
-  // }
-    AuthService authService = AuthService(); // Create an instance of AuthService
+  AuthService authService = AuthService(); // Create an instance of AuthService
 
   void verifyOTP() async {
-  setState(() {
-    isLoading = true;
-  });
+    setState(() {
+      isLoading = true;
+    });
 
-  String otp = otpController.text.trim();
+    String otp = otpController.text.trim();
 
-  final response = await authService.verifyOTP(widget.email, otp);
+    final response = await authService.verifyOTP(widget.email, otp);
 
-  setState(() {
-    isLoading = false;
-  });
+    setState(() {
+      isLoading = false;
+    });
 
-  if (response['success']) {
-    var user = response['user'];
+    if (response['success']) {
+      var user = response['user'];
+      print("the user: " + user.toString()); // Corrected print statement
+      print("id : " +
+          user['_id'].toString()); // Safely convert to String for print
+      // Check if the user is a student
+      final prefs = await SharedPreferences.getInstance();
 
-    // Check if the user is a student
-    if (widget.email.contains('@student')) {
-      final studentBox = Hive.box<Student>('studentsBox');
-      studentBox.put(user['id'], Student(
-        id: user['id'],
-        username: user['username'],
-        name: user['name'],
-        email: user['email'],
-        department: user['department'],
-        year: user['year'],
-        address: user['address'],
-        handicapped: user['handicapped'] ?? false,
-      ));
+      if (widget.email.contains('@student')) {
+        await prefs.setString('userType', 'student');
+        final studentBox = Hive.box<Student>('studentsBox');
+        studentBox.put(
+            user['_id'],
+            Student(
+              id: user['_id'],
+              username: user['username'],
+              name: "", // Empty string as a placeholder
+              email: user['email'],
+              department: "", // Empty string for now
+              year: "", // Empty string for now
+              address: "", // Empty string for now
+              handicapped: false, // Default value for now
+            ));
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => StudentMultiStepForm(),
-        ),
-      );
+        print("Student box contents: ${studentBox.toMap()}");
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StudentMultiStepForm(),
+          ),
+        );
+      } else {
+        await prefs.setString('userType', 'faculty');
+        final facultyBox = Hive.box<Faculty>('facultyBox');
+        facultyBox.put(
+            user['_id'],
+            Faculty(
+                id: user['_id'],
+                name: user['name'],
+                email: user['email'],
+                username: user['username'],
+                department: "",
+                subjects: List<String>.from(user['subjects'] ?? []),
+                experience: 0,
+                gender: ""));
+
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => FacultyMultiStepForm(),
+        //   ),
+        // );
+      }
+
+      // Optionally save token and login state using SharedPreferences
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('token', response['token']);
     } else {
-      // Save faculty info locally
-      final facultyBox = Hive.box<Faculty>('facultyBox');
-      facultyBox.put(user['id'], Faculty(
-        id: user['id'],
-        name: user['name'],
-        email: user['email'],
-        username: user['username'],
-        department: user['department'],
-        subjects: List<String>.from(user['subjects'] ?? []),
-        experience: user['experience'],
-        gender: user['gender'],
-      ));
-
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => FacultyMultiStepForm(),
-      //   ),
-      // );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response['message'])),
+      );
     }
-
-    // Optionally save token and login state using SharedPreferences
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isLoggedIn', true);
-    await prefs.setString('token', response['token']);
-    
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(response['message'])),
-    );
   }
-}
-
 
   @override
   Widget build(BuildContext context) {

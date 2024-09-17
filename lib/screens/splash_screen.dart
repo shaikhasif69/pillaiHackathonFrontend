@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pillai_hackcelestial/main.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,18 +18,40 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _controller;
 
   @override
-  void initState() {
+  void initState()  {
+  
     super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1500),
       vsync: this,
     );
+    myFucntion();
 
-    Future.delayed(const Duration(seconds: 5), () {
+    
+  }
+
+  void myFucntion() async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Check if the user is logged in
+    bool isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    String? userType =
+        prefs.getString('userType'); // Could be "student" or "faculty"
+Future.delayed(const Duration(seconds: 5), () {
       _controller.forward().then((value) {
         // Navigate to onboarding screen using GoRouter
-        GoRouter.of(context).pushReplacement(CommonRoutes.onBoardScreen);
+        if (isLoggedIn) {
+          if (userType == 'student'){
+            GoRouter.of(context).pushReplacement(StudentsRoutes.studentHomePage);
+          }
+          else{
+            GoRouter.of(context).pushReplacement(FacultyRoutes.facultyHomePage);
+          }
+        }
+        else{
+            GoRouter.of(context).pushReplacement(CommonRoutes.onBoardScreen);
+        }
       });
     });
   }

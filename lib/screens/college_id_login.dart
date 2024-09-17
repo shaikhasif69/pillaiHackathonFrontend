@@ -41,15 +41,11 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
 
       // Navigate to respective home screen based on email type
       if (email.contains('@student')) {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => StudentHomeScreen()),
-        // );
+        await prefs.setString('userType', 'student');
+
+        GoRouter.of(context).pushNamed(StudentsRoutes.studentHomePage);
       } else {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => FacultyHomeScreen()),
-        // );
+        await prefs.setString('userType', 'faculty');
       }
     } else {
       // Show error message
