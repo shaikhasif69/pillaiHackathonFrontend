@@ -1,5 +1,8 @@
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_desciption_page2.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page1.dart';
+import 'package:pillai_hackcelestial/screens/Students/events_screen.dart';
 import 'package:pillai_hackcelestial/screens/Students/multi_step_form.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
 import 'package:pillai_hackcelestial/screens/college_id_login.dart';
@@ -26,7 +29,7 @@ class MyGoRouter {
     String? userType =
         prefs.getString('userType'); // Could be "student" or "faculty"
 
-    String initialRoute = CommonRoutes.splashScreen; 
+    String initialRoute = CommonRoutes.splashScreen;
 
     // if (isLoggedIn) {
     //   if (userType == 'student') {
@@ -43,7 +46,7 @@ class MyGoRouter {
       initialLocation: CommonRoutes.splashScreen,
       // initialLocation: CommonRoutes.splashScreen,
       routes: [
-            GoRoute(
+        GoRoute(
           path: CommonRoutes.splashScreen,
           name: CommonRoutes.splashScreen,
           builder: (context, state) => const SplashScreen(),
@@ -96,7 +99,7 @@ class MyGoRouter {
 
         // Students Routes :
 
-      GoRoute(
+        GoRoute(
           path: StudentsRoutes.studentSetup,
           name: StudentsRoutes.studentSetup,
           builder: (context, state) {
@@ -106,27 +109,34 @@ class MyGoRouter {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                
+
                 if (snapshot.hasData) {
                   bool? formFilled = snapshot.data?.getBool('formFilled');
                   if (formFilled == true) {
                     Future.microtask(() {
-                      GoRouter.of(context).pushNamed(StudentsRoutes.studentHomePage);
+                      GoRouter.of(context)
+                          .pushNamed(StudentsRoutes.studentHomePage);
                     });
-                    return const SizedBox.shrink(); // Empty widget while redirecting
+                    return const SizedBox
+                        .shrink(); // Empty widget while redirecting
                   }
                 }
-                
+
                 return StudentMultiStepForm();
               },
             );
           },
         ),
 
+        // GoRoute(
+        //   path: StudentsRoutes.studentHomePage,
+        //   name: StudentsRoutes.studentHomePage,
+        //   builder: (context, state) => EventScreen(),
+        // ),
         GoRoute(
           path: StudentsRoutes.studentHomePage,
           name: StudentsRoutes.studentHomePage,
-          builder: (context, state) => DummyHomePage(),
+          builder: (context, state) => EventDescPage2(),
         ),
 
         // faculty Routes :
