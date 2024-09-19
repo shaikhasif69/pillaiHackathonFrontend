@@ -8,6 +8,13 @@ class StudentsRoutes {
   static String MyCommunity = "/student/community/MyCommunity";
   static String studentSetup = "/student/studentSetup";
   static String studentHomePage = "/student/studentHomePage";
+  static String studentProfilePage = "/student/studentProfilePage";
+
+
+  static String eventPage1 = "/student/eventPage1";
+  static String eventPage2 = "/student/eventPage2";
+  static String eventPage3 = "//student/eventPage3";
+  static String eventPage4 = "//student/eventPage4";
 }
 
 class FacultyRoutes {

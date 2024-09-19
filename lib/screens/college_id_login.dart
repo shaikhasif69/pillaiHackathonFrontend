@@ -44,7 +44,7 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
       if (email.contains('@student')) {
         await prefs.setString('userType', 'student');
 
-        GoRouter.of(context).pushNamed(StudentsRoutes.studentHomePage);
+        GoRouter.of(context).pushReplacement(StudentsRoutes.studentHomePage);
       } else {
         await prefs.setString('userType', 'faculty');
       }

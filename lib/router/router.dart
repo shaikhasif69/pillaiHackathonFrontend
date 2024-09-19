@@ -1,14 +1,18 @@
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:pillai_hackcelestial/screens/HomeScreen.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_desciption_page2.dart';
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page1.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page3.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page4.dart';
 import 'package:pillai_hackcelestial/screens/Students/events_screen.dart';
 import 'package:pillai_hackcelestial/screens/Students/multi_step_form.dart';
+import 'package:pillai_hackcelestial/screens/Students/student_profile.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
 import 'package:pillai_hackcelestial/screens/college_id_login.dart';
 import 'package:pillai_hackcelestial/screens/signup_page.dart';
 import 'package:pillai_hackcelestial/screens/splash_screen.dart';
-
+import 'package:pillai_hackcelestial/screens/userOtpForm.dart';
 import 'package:pillai_hackcelestial/widgets/dummy_home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -44,6 +48,7 @@ class MyGoRouter {
 
     router = GoRouter(
       initialLocation: CommonRoutes.splashScreen,
+      // initialLocation: CommonRoutes.splashScreen,
       routes: [
         GoRoute(
           path: CommonRoutes.splashScreen,
@@ -132,11 +137,32 @@ class MyGoRouter {
         //   name: StudentsRoutes.studentHomePage,
         //   builder: (context, state) => EventScreen(),
         // ),
+        // GoRoute(
+        //   path: StudentsRoutes.studentHomePage,
+        //   name: StudentsRoutes.studentHomePage,
+        //   builder: (context, state) => Homescreen(),
+        // ),
+        // GoRoute(
+        //   path: StudentsRoutes.studentProfilePage,
+        //   name: StudentsRoutes.studentProfilePage,
+        //   builder: (context, state) => ProfileScreen(),
+        // ),
+
         GoRoute(
           path: StudentsRoutes.studentHomePage,
           name: StudentsRoutes.studentHomePage,
-          builder: (context, state) => EventDescPage2(),
+          builder: (context, state) => ProfileScreen(),
         ),
+        GoRoute(
+          path: StudentsRoutes.eventPage3,
+          name: StudentsRoutes.eventPage3,
+          builder: (context, state) => EventDescPage3(),
+        ),
+        // GoRoute(
+        //   path: StudentsRoutes.eventPage4,
+        //   name: StudentsRoutes.eventPage4,
+        //   builder: (context, state) => EventDescPage4(),
+        // ),
 
         // faculty Routes :
         // GoRoute(

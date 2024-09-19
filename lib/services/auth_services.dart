@@ -6,7 +6,7 @@ import 'package:pillai_hackcelestial/models/student.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final String baseUrl = 'http://192.168.0.108:3000';
+  final String baseUrl = 'http://192.168.0.102:3000';
 
   Future<Map<String, dynamic>> signup(
       String email, String username, String password) async {

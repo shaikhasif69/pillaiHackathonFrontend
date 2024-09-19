@@ -54,26 +54,26 @@ class AskLoginpage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 20,
+            SizedBox(
+              height: screenHeight * 0.02,
             ),
             Text(
               "Not a current Student or Faculty? ",
               style: GoogleFonts.abyssinicaSil(fontSize: 16),
             ),
             SizedBox(
-              height: screenHeight * 0.15,
+              height: screenHeight * 0.11,
             ),
             Text(
-              "Reconnect with the roots that shaped you,",
-              style: GoogleFonts.abyssinicaSil(fontSize: 17),
-            ),
-            Text(
-              "and let your journey inspire the next generation.",
-              style: GoogleFonts.abyssinicaSil(fontSize: 17),
-            ),
+                "Reconnect with the roots that shaped you,\n and let your journey inspire the next generation.", textAlign: TextAlign.center,
+                style: GoogleFonts.abyssinicaSil(fontSize: 16),
+                ),
+            // Text(
+            //   "and let your journey inspire the next generation.",
+            //   style: GoogleFonts.abyssinicaSil(fontSize: 17),
+            // ),
             SizedBox(
-              height: screenHeight * 0.04,
+              height: screenHeight * 0.08,
             ),
             GestureDetector(
               onTap: () {
