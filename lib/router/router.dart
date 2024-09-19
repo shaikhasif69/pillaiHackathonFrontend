@@ -44,7 +44,6 @@ class MyGoRouter {
 
     router = GoRouter(
       initialLocation: CommonRoutes.splashScreen,
-      // initialLocation: CommonRoutes.splashScreen,
       routes: [
         GoRoute(
           path: CommonRoutes.splashScreen,
