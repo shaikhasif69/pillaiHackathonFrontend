@@ -1,7 +1,15 @@
+import 'package:pillai_hackcelestial/model/community.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:pillai_hackcelestial/screens/Communities/Commnuinty.dart';
+import 'package:pillai_hackcelestial/screens/Communities/CommunityDetails.dart';
+import 'package:pillai_hackcelestial/screens/Communities/MyCommunity.dart';
+import 'package:pillai_hackcelestial/screens/Communities/createCommunity.dart';
+import 'package:pillai_hackcelestial/screens/HomeScreen.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
 import 'package:pillai_hackcelestial/screens/college_id_login.dart';
+import 'package:pillai_hackcelestial/screens/committe/create/createCommitte.dart';
+import 'package:pillai_hackcelestial/screens/committe/create/createCommitteform.dart';
 import 'package:pillai_hackcelestial/screens/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +22,37 @@ class MyGoRouter {
       GoRoute(
         path: CommonRoutes.splashScreen,
         name: CommonRoutes.splashScreen,
-        builder: (context, state) => const SplashScreen(),
+        builder: (context, state) => Homescreen(),
+      ),
+      GoRoute(
+        path: StudentsRoutes.communityDetails,
+        name: StudentsRoutes.communityDetails,
+        builder: (context, state) {
+          Communites data = state.extra as Communites;
+          return CommnunityDetails(data: data);
+        },
+      ),
+      GoRoute(
+        path: StudentsRoutes.createCommunity,
+        name: StudentsRoutes.createCommunity,
+        builder: (context, state) {
+          return CreateCommunity();
+        },
+      ),
+      GoRoute(
+        path: StudentsRoutes.MyCommunity,
+        name: StudentsRoutes.MyCommunity,
+        builder: (context, state) {
+          Communites d = state.extra as Communites;
+          return Mycommunity(
+            data: d,
+          );
+        },
+      ),
+      GoRoute(
+        path: StudentsRoutes.community,
+        name: StudentsRoutes.community,
+        builder: (context, state) => CommnuintyPage(),
       ),
       GoRoute(
         path: CommonRoutes.onBoardScreen,
@@ -33,7 +71,18 @@ class MyGoRouter {
           );
         },
       ),
-
+      GoRoute(
+          path: StudentsRoutes.createCommitte,
+          name: StudentsRoutes.createCommitte,
+          pageBuilder: (context, state) {
+            return MaterialPage(child: createCommitte());
+          }),
+      GoRoute(
+          path: StudentsRoutes.createCommitteForm,
+          name: StudentsRoutes.createCommitteForm,
+          pageBuilder: (context, state) {
+            return MaterialPage(child: createCommitteForm());
+          }),
       GoRoute(
         path: CommonRoutes.askLoginScreen,
         name: CommonRoutes.askLoginScreen,
