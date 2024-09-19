@@ -43,12 +43,16 @@ class MyGoRouter {
   }
 
 // <<<<<<< HEAD
-  final GoRouter router =
-      GoRouter(initialLocation: CommonRoutes.splashScreen, routes: [
+  final GoRouter router = GoRouter(routes: [
+    // GoRoute(
+    //   path: CommonRoutes.splashScreen,
+    //   name: CommonRoutes.splashScreen,
+    //   builder: (context, state) => Homescreen(),
+    // ),
     GoRoute(
       path: CommonRoutes.splashScreen,
       name: CommonRoutes.splashScreen,
-      builder: (context, state) => Homescreen(),
+      builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
       path: StudentsRoutes.communityDetails,
@@ -96,23 +100,19 @@ class MyGoRouter {
         );
       },
     ),
-    GoRoute(
-        path: StudentsRoutes.createCommitte,
-        name: StudentsRoutes.createCommitte,
-        pageBuilder: (context, state) {
-          return MaterialPage(child: createCommitte());
-        }),
+    // GoRoute(
+    //     path: StudentsRoutes.createCommitte,
+    //     name: StudentsRoutes.createCommitte,
+    //     pageBuilder: (context, state) {
+    //       return MaterialPage(child: createCommitte());
+    //     }),
     GoRoute(
         path: StudentsRoutes.createCommitteForm,
         name: StudentsRoutes.createCommitteForm,
         pageBuilder: (context, state) {
           return MaterialPage(child: createCommitteForm());
         }),
-    GoRoute(
-      path: CommonRoutes.splashScreen,
-      name: CommonRoutes.splashScreen,
-      builder: (context, state) => const SplashScreen(),
-    ),
+
     // GoRoute(
     //   path: CommonRoutes.splashScreen,
     //   name: CommonRoutes.splashScreen,
