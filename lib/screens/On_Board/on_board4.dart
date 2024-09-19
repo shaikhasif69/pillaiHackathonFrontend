@@ -8,7 +8,7 @@ class on_board4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       color: Colors.white,
       child: Column(children: [
         const SizedBox(
@@ -26,12 +26,23 @@ class on_board4 extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Text(
-            "LEAR, CONNECT & SHARE",
-           style: GoogleFonts.agdasima(
-                          fontSize: 28,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
+          child: Column(
+            children: [
+              Text(
+                "LEARN, CONNECT & SHARE",
+                style: GoogleFonts.agdasima(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
+              ),
+              Text(
+                "with, AcademicVerse",
+                style: GoogleFonts.agdasima(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black),
+              ),
+            ],
           ),
         )
       ]),

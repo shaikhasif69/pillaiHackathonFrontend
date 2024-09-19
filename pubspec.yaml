@@ -43,13 +43,22 @@ dependencies:
   go_router: ^14.2.7
   flutter_riverpod: ^2.5.1
   shared_preferences: ^2.3.2
+<<<<<<< HEAD
   animated_text_kit: ^4.2.2
   carousel_slider: ^5.0.0
   intl: ^0.17.0
   image_picker: ^1.1.2
   socket_io_client: ^2.0.3+1
+=======
+  provider: ^6.1.2
+  flutter_riverpod: ^2.5.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+>>>>>>> da927776650a71c194649b51ffdeabc1dd3de602
 
 dev_dependencies:
+  hive_generator: ^1.1.0
+  build_runner: ^2.1.0
   flutter_test:
     sdk: flutter
 

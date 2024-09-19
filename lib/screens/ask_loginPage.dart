@@ -18,10 +18,10 @@ class AskLoginpage extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: 100,
+              height: MediaQuery.of(context).size.height * 0.09,
             ),
-            Container(
-              height: 320,
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.32,
               width: double.infinity,
               child: Image.asset(
                 "assets/images/ACADEMICVERSE.png",
@@ -30,7 +30,7 @@ class AskLoginpage extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                GoRouter.of(context).pushNamed(CommonRoutes.collegeIdLogin);
+                GoRouter.of(context).pushNamed(CommonRoutes.signUpScreen);
               },
               child: Container(
                 width: screenWidth * 0.7,
@@ -46,7 +46,7 @@ class AskLoginpage extends StatelessWidget {
                       height: 30,
                     ),
                     Text(
-                      "Sign in with College Id",
+                      "Sign Up with College Id",
                       style: GoogleFonts.abyssinicaSil(
                           fontSize: 18, fontWeight: FontWeight.w600),
                     )
@@ -55,14 +55,14 @@ class AskLoginpage extends StatelessWidget {
               ),
             ),
             const SizedBox(
-              height: 10,
+              height: 20,
             ),
             Text(
               "Not a current Student or Faculty? ",
               style: GoogleFonts.abyssinicaSil(fontSize: 16),
             ),
             SizedBox(
-              height: screenHeight * 0.1,
+              height: screenHeight * 0.15,
             ),
             Text(
               "Reconnect with the roots that shaped you,",
@@ -73,36 +73,74 @@ class AskLoginpage extends StatelessWidget {
               style: GoogleFonts.abyssinicaSil(fontSize: 17),
             ),
             SizedBox(
-              height: screenHeight * 0.08,
+              height: screenHeight * 0.04,
             ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.06,
-              width: MediaQuery.of(context).size.width * 0.7,
-              decoration: BoxDecoration(
-                  color: MyColors.ourPrimary,
-                  borderRadius: BorderRadius.circular(15)),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Let's Go Alumni ",
-                      style: GoogleFonts.abyssinicaSil(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.06,
-                      width: MediaQuery.of(context).size.width * 0.06,
-                      child: Image.asset(
-                        "lib/icons/heart.png",
-                        color: Colors.white,
+            GestureDetector(
+              onTap: () {
+                print("Navigate to the Alumni Page Further Page");
+              },
+              child: Container(
+                height: MediaQuery.of(context).size.height * 0.06,
+                width: MediaQuery.of(context).size.width * 0.7,
+                decoration: BoxDecoration(
+                    color: MyColors.ourPrimary,
+                    borderRadius: BorderRadius.circular(15)),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Let's Go Alumni ",
+                        style: GoogleFonts.abyssinicaSil(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
                       ),
-                    ),
-                  ],
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.06,
+                        width: MediaQuery.of(context).size.width * 0.06,
+                        child: Image.asset(
+                          "lib/icons/heart.png",
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+            ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.08,
+            ),
+            const Divider(
+              thickness: 1,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Already have an account? ",
+                  style: GoogleFonts.abyssinicaSil(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.black),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    GoRouter.of(context).pushNamed(CommonRoutes.collegeIdLogin);
+                  },
+                  child: Text(
+                    "Sign In.",
+                    style: GoogleFonts.abyssinicaSil(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                ),
+              ],
             )
           ],
         ),
