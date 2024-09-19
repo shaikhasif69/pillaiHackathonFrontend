@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pillai_hackcelestial/Socket/init.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:pillai_hackcelestial/models/faculty.dart';
 import 'package:pillai_hackcelestial/models/student.dart';
@@ -10,6 +12,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   await Hive.initFlutter();
+  mySocketConnect.connect();
   // Register the adapters
   Hive.registerAdapter(StudentAdapter());
   Hive.registerAdapter(FacultyAdapter());

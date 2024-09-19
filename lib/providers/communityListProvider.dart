@@ -1,0 +1,50 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pillai_hackcelestial/Services/student.dart';
+import 'package:pillai_hackcelestial/constant.dart';
+import 'package:pillai_hackcelestial/model/Faculty.dart';
+import 'package:pillai_hackcelestial/model/community.dart';
+import 'package:pillai_hackcelestial/model/user.dart';
+
+class CommunityListNotifier extends StateNotifier<List<Communites>?> {
+  CommunityListNotifier() : super(null);
+
+  getCommutityList() async {
+    List<Communites>? data;
+    if (consCommunityList == null) {
+      data = await StudentServices.getCommunityList();
+      state = data;
+    }
+  }
+
+  updateCommunityList() async {
+    List<Communites>? data;
+
+    List<Communites>? data1 = state;
+    data = await StudentServices.getCommunityList();
+
+    if (data != null) {
+      data.forEach((e) {
+        state!.add(e);
+      });
+    }
+  }
+}
+
+class MyCommunityListNotifier extends StateNotifier<List<Communites>?> {
+  MyCommunityListNotifier() : super(null);
+
+  getCommutityList() async {
+    List<Communites>? data;
+
+    data = await StudentServices.getMyCommunities();
+    state = data;
+  }
+}
+
+final MycommunityListProvider =
+    StateNotifierProvider<MyCommunityListNotifier, List<Communites>?>(
+        (ref) => MyCommunityListNotifier());
+
+final communityListProvider =
+    StateNotifierProvider<CommunityListNotifier, List<Communites>?>(
+        (ref) => CommunityListNotifier());
