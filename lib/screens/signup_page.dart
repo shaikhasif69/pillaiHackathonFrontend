@@ -3,65 +3,55 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
-// import 'package:pillai_hackcelestial/widgets/username.dart';
-// import 'package:pillai_hackcelestial/widgets/username.dart';
+import 'package:pillai_hackcelestial/screens/userOtpForm.dart';
 import 'package:pillai_hackcelestial/services/auth_services.dart';
 import 'package:pillai_hackcelestial/widgets/input_text_container.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class CollegeIdLoginPage extends StatefulWidget {
-  const CollegeIdLoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<CollegeIdLoginPage> createState() => _CollegeIdLoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
-  TextEditingController collegeId = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
+class _SignUpPageState extends State<SignUpPage> {
   final AuthService _authService = AuthService();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
-  void signIn() async {
-    setState(() {
-      isLoading = true;
-    });
+  void _signup() async {
+    String email = _emailController.text;
+    String username = _usernameController.text;
+    String password = _passwordController.text;
 
-    String email = collegeId.text.trim();
-    String password = passwordController.text.trim();
+    // Call the signup function from the service
+    final result = await _authService.signup(email, username, password);
 
-    final response = await _authService.signIn(email, password);
-
-    setState(() {
-      isLoading = false;
-    });
-
-    if (response['success']) {
-      // Store authentication status
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', true);
-
-      // Navigate to respective home screen based on email type
-      if (email.contains('@student')) {
-        await prefs.setString('userType', 'student');
-
-        GoRouter.of(context).pushNamed(StudentsRoutes.studentHomePage);
-      } else {
-        await prefs.setString('userType', 'faculty');
-      }
-    } else {
-      print("error bro error");
-      print("error : " + response['message']);
+    if (result['success']) {
+      // Show OTP screen or success message
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response['message'])),
+        SnackBar(content: Text(result['message'])),
+      );
+       Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => userOtpFormPage(email: _emailController.text),
+          ),
+        );
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(result['message'])),
       );
     }
   }
 
   @override
   void initState() {
-    collegeId = TextEditingController();
-    passwordController = TextEditingController();
+    _emailController = TextEditingController();
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
     super.initState();
   }
 
@@ -86,12 +76,17 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
                 ),
               ),
               InputTextContainer(
-                con: collegeId,
+                con: _emailController,
                 label: "College ID",
               ),
               const SizedBox(height: 10),
               InputTextContainer(
-                con: passwordController,
+                con: _usernameController,
+                label: "Username",
+              ),
+              const SizedBox(height: 10),
+              InputTextContainer(
+                con: _passwordController,
                 label: "Password",
                 isPassword: true,
               ),
@@ -119,7 +114,8 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
               ),
               GestureDetector(
                 onTap: () {
-                  signIn();
+                  _signup();
+                  // GoRouter.of(context).pushNamed(StudentsRoutes.studentSetup);
                 },
                 child: Container(
                   height: MediaQuery.of(context).size.height * 0.06,
@@ -132,7 +128,7 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Log in",
+                          "Sign Up",
                           style: GoogleFonts.aBeeZee(
                               fontSize: 16,
                               fontStyle: FontStyle.italic,

@@ -85,7 +85,6 @@ class _Discussionchatlist extends ConsumerState<Discussionchatlist> {
                           }
                         },
                       )),
-
                 // Spacer(),
                 Container(
                   color: Color.fromARGB(0, 254, 200, 4),
