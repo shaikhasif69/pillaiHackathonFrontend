@@ -50,6 +50,8 @@ dependencies:
   flutter_riverpod: ^2.5.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  dotted_separator: ^1.0.6
+  syncfusion_flutter_barcodes: ^27.1.48
 
 dev_dependencies:
   hive_generator: ^1.1.0

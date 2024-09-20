@@ -14,6 +14,12 @@ class StudentsRoutes {
   static String chattingList = "/student/chattingList";
   static String chattingPage = "/student/chattingPage";
   static String StudentFourm = "/student/studentFourm";
+  static String studentProfilePage = "/student/studentProfilePage";
+
+  static String eventPage1 = "/student/eventPage1";
+  static String eventPage2 = "/student/eventPage2";
+  static String eventPage3 = "//student/eventPage3";
+  static String eventPage4 = "//student/eventPage4";
 }
 
 class FacultyRoutes {

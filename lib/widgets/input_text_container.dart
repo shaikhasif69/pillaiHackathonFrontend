@@ -58,7 +58,7 @@ class _InputTextContainer extends State<InputTextContainer> {
         width: MediaQuery.of(context).size.width * 0.9,
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 247, 247, 247),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
           border: showBorder
               ? Border.all(width: 1.5, color: MyColors.ourPrimary)
               : Border.all(width: 0.5, color: Colors.black),
@@ -76,7 +76,7 @@ class _InputTextContainer extends State<InputTextContainer> {
                   : TextInputType.emailAddress,
               decoration: InputDecoration(
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 18, horizontal: 60),
+                    const EdgeInsets.symmetric(vertical: 18, horizontal: 10),
                 suffixIcon: widget.isPassword
                     ? IconButton(
                         icon: Icon(
@@ -94,7 +94,7 @@ class _InputTextContainer extends State<InputTextContainer> {
                     : null,
                 prefixIcon: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
                   child: Icon(
                     widget.isPassword
                         ? Icons.lock_outline
@@ -113,8 +113,8 @@ class _InputTextContainer extends State<InputTextContainer> {
             // Show the label only if there is no text entered
             if (isLabelVisible)
               Positioned(
-                left: 63,
-                top: 18,
+                left: 50,
+                top: 14,
                 child: Text(
                   widget.label,
                   style: const TextStyle(
