@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:pillai_hackcelestial/model/Event.dart';
-import 'package:pillai_hackcelestial/models/event_model.dart';
 
 class EventCard extends StatelessWidget {
   final Event event;

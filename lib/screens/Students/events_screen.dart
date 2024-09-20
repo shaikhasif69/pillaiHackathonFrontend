@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/model/Event.dart';
-import 'package:pillai_hackcelestial/models/event_model.dart';
 import 'package:pillai_hackcelestial/models/popular_model.dart';
 import 'package:pillai_hackcelestial/services/event_services.dart';
 import 'package:pillai_hackcelestial/widgets/event_card.dart';

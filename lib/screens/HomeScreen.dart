@@ -283,7 +283,10 @@ class _HomeScreen extends ConsumerState<Homescreen>
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
-                  child: Text("View More", style: TextStyle(color: MyColors.ourPrimary),),
+                  child: Text(
+                    "View More",
+                    style: TextStyle(color: MyColors.ourPrimary),
+                  ),
                 )
               ],
             ),
@@ -305,7 +308,10 @@ class _HomeScreen extends ConsumerState<Homescreen>
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 10.0),
-                        child: Text("View More", style: TextStyle(color: MyColors.ourPrimary),),
+                        child: Text(
+                          "View More",
+                          style: TextStyle(color: MyColors.ourPrimary),
+                        ),
                       )
                     ],
                   ),

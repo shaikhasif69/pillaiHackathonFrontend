@@ -41,6 +41,7 @@ class StudentServices {
         var data = json.decode(res.body);
         // dev.log(data.toString());
         // dev.log(data['facultyDetails'].toString());
+
         return User(
             username: data['username'],
             email: data['email'],
