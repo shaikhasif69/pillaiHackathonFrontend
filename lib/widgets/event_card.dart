@@ -1,10 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:pillai_hackcelestial/model/Event.dart';
 import 'package:pillai_hackcelestial/models/event_model.dart';
 
 class EventCard extends StatelessWidget {
-  final EventModel event;
+  final Event event;
   const EventCard(
     this.event, {
     Key? key,
@@ -56,14 +57,15 @@ class EventCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              event.date!,
+                              // event.date!,
+                              event.createdAt!,
                               // style: whiteTextStyle.copyWith(
                               //   fontWeight: semiBold,
                               //   fontSize: 12,
                               // ),
                             ),
                             Text(
-                              event.month!,
+                              event.createdAt!,
                               // style: whiteTextStyle.copyWith(
                               //   fontSize: 8,
                               // ),
@@ -91,7 +93,8 @@ class EventCard extends StatelessWidget {
                 width: 4,
               ),
               Text(
-                event.location!,
+                event.author.toString()!,
+                // event.location!,
                 // style: greyTextStyle,
               ),
             ],
@@ -100,7 +103,8 @@ class EventCard extends StatelessWidget {
             height: 2,
           ),
           Text(
-            event.name!,
+            event.createdAt!,
+            // event.name!,
             // style: primaryTextStyle.copyWith(
             //   fontWeight: semiBold,
             // ),
