@@ -13,6 +13,9 @@ import 'package:pillai_hackcelestial/screens/Event/createEvent.dart';
 import 'package:pillai_hackcelestial/screens/HomeScreen.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
 import 'package:pillai_hackcelestial/screens/StudentFourm/studentFourm.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page3.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page4.dart';
+import 'package:pillai_hackcelestial/screens/Students/events_screen.dart';
 import 'package:pillai_hackcelestial/screens/Students/multi_step_form.dart';
 import 'package:pillai_hackcelestial/screens/Students/student_profile.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
@@ -180,6 +183,26 @@ class MyGoRouter {
       builder: (context, state) => Homescreen(),
     ),
     GoRoute(
+      path: StudentsRoutes.studentProfilePage,
+      name: StudentsRoutes.studentProfilePage,
+      builder: (context, state) => ProfileScreen(),
+    ),
+           GoRoute(
+          path: StudentsRoutes.eventPage1,
+          name: StudentsRoutes.eventPage1,
+          builder: (context, state) => EventScreen(),
+        ),
+    GoRoute(
+      path: StudentsRoutes.eventPage3,
+      name: StudentsRoutes.eventPage3,
+      builder: (context, state) => EventDescPage3(),
+    ),
+    GoRoute(
+      path: StudentsRoutes.eventPage4,
+      name: StudentsRoutes.eventPage4,
+      builder: (context, state) => EventDescPage4(),
+    ),
+    GoRoute(
       path: StudentsRoutes.chattingList,
       name: StudentsRoutes.chattingList,
       builder: (context, state) => ChatList(),
@@ -210,6 +233,12 @@ class MyGoRouter {
           data: data,
         );
       },
-    )
+    ),
+
+        //    GoRoute(
+        //   path: FacultyRoutes.facultyHomePage,
+        //   name: FacultyRoutes.facultyHomePage,
+        //   // builder: (context, state) => facultyHomePage(),
+        // ),
   ]);
 }
