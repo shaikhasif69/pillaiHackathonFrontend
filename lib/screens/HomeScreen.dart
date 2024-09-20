@@ -23,6 +23,11 @@ class Homescreen extends ConsumerStatefulWidget {
 class _HomeScreen extends ConsumerState<Homescreen> {
   Widget build(context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.mic),
+          onPressed: () {
+            GoRouter.of(context).pushNamed(StudentsRoutes.chatBot);
+          }),
       drawer: Drawer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,7 +35,7 @@ class _HomeScreen extends ConsumerState<Homescreen> {
             Expanded(
               flex: 30,
               child: DrawerHeader(
-                  padding: EdgeInsets.fromLTRB(40.0, 16.0, 16.0, 8.0),
+                  padding: const EdgeInsets.fromLTRB(40.0, 16.0, 16.0, 8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -68,32 +73,51 @@ class _HomeScreen extends ConsumerState<Homescreen> {
               flex: 70,
               child: Column(
                 children: [
-                  ListTile(
-                    leading: Icon(Icons.file_copy),
-                    title: Text(
-                      "Profile",
-                      style: GoogleFonts.abel(fontSize: 16),
+                  InkWell(
+                    child: ListTile(
+                      leading: Icon(Icons.file_copy),
+                      title: Text(
+                        "Profile",
+                        style: GoogleFonts.abel(fontSize: 16),
+                      ),
                     ),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.file_copy),
-                    title: Text(
-                      "Communities",
-                      style: GoogleFonts.abel(fontSize: 16),
+                  InkWell(
+                    onTap: () {
+                      GoRouter.of(context).pushNamed(StudentsRoutes.community);
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.file_copy),
+                      title: Text(
+                        "Communities",
+                        style: GoogleFonts.abel(fontSize: 16),
+                      ),
                     ),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.file_copy),
-                    title: Text(
-                      "Student Forum",
-                      style: GoogleFonts.abel(fontSize: 16),
+                  InkWell(
+                    onTap: () {
+                      GoRouter.of(context)
+                          .pushNamed(StudentsRoutes.StudentFourm);
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.file_copy),
+                      title: Text(
+                        "Student Forum",
+                        style: GoogleFonts.abel(fontSize: 16),
+                      ),
                     ),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.file_copy),
-                    title: Text(
-                      "Chats",
-                      style: GoogleFonts.abel(fontSize: 16),
+                  InkWell(
+                    onTap: () {
+                      GoRouter.of(context)
+                          .pushNamed(StudentsRoutes.chattingList);
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.file_copy),
+                      title: Text(
+                        "Chats",
+                        style: GoogleFonts.abel(fontSize: 16),
+                      ),
                     ),
                   ),
                   ListTile(

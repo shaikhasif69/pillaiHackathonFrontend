@@ -1,6 +1,7 @@
 import 'package:pillai_hackcelestial/model/community.dart';
 import 'package:pillai_hackcelestial/models/UserChatList.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:pillai_hackcelestial/screens/Chatin/ChatBot.dart';
 import 'package:pillai_hackcelestial/screens/Chatin/ChattingPage.dart';
 import 'package:pillai_hackcelestial/screens/Chatin/chatList.dart';
 import 'package:pillai_hackcelestial/screens/Communities/AddPost.dart';
@@ -199,6 +200,13 @@ class MyGoRouter {
       name: StudentsRoutes.StudentFourm,
       builder: (context, state) {
         return StudentForum();
+      },
+    ),
+    GoRoute(
+      path: StudentsRoutes.chatBot,
+      name: StudentsRoutes.chatBot,
+      builder: (context, state) {
+        return ChatBot();
       },
     ),
     GoRoute(
