@@ -76,10 +76,11 @@ class AuthService {
 
       // Save token to SharedPreferences
       ;
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('authToken', token);
       await prefs.setString("_id", userId);
-
+      await StudentServices.myShredPrefs();
       // Save user data to Hive
       if (email.contains('@student')) {
         var studentBox = await Hive.openBox<Student>('studentsBox');

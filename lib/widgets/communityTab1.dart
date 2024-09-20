@@ -17,6 +17,9 @@ class _CommunityTab1 extends ConsumerState<CommunityTab1> {
   late ScrollController controller;
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.watch(communityListProvider.notifier).getCommutityList();
+    });
     controller = ScrollController()..addListener(_scrollListener);
     super.initState();
   }
@@ -31,6 +34,8 @@ class _CommunityTab1 extends ConsumerState<CommunityTab1> {
 
   Widget build(context) {
     var data = ref.watch(communityListProvider);
+    print("its null");
+    print(data.toString());
     return data == null
         ? Center(child: CircularProgressIndicator())
         : data.isEmpty

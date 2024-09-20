@@ -128,7 +128,7 @@ class _Communitytab2 extends ConsumerState<Communitytab2> {
                                             Radius.circular(40))),
                                     elevation: 10,
                                     child: Container(
-                                      height: 190,
+                                      height: 220,
                                       // color: Colors.pink,
                                       child: Padding(
                                         padding: const EdgeInsets.all(16.0),
@@ -145,14 +145,16 @@ class _Communitytab2 extends ConsumerState<Communitytab2> {
                                                   ),
                                                   Row(
                                                     children: [
-                                                      Text(
-                                                        commu.name!,
-                                                        style:
-                                                            GoogleFonts.mulish(
-                                                                fontSize: 16,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                      Expanded(
+                                                        child: Text(
+                                                          commu.name!,
+                                                          style: GoogleFonts
+                                                              .mulish(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                        ),
                                                       ),
                                                       SizedBox(
                                                         width: 10,

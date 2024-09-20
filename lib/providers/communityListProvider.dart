@@ -10,10 +10,10 @@ class CommunityListNotifier extends StateNotifier<List<Communites>?> {
 
   getCommutityList() async {
     List<Communites>? data;
-    if (consCommunityList == null) {
-      data = await StudentServices.getCommunityList();
-      state = data;
-    }
+
+    data = await StudentServices.getCommunityList();
+    print("got good");
+    state = data;
   }
 
   updateCommunityList() async {

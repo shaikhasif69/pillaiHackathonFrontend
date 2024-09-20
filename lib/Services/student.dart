@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http/http.dart' as http;
 import 'package:pillai_hackcelestial/constant.dart';
@@ -20,20 +21,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 class StudentServices {
   static late String myId;
   static late SharedPreferences pref;
-  static late String token;
+  // static late String token;
   static Future<void> myShredPrefs() async {
     pref = await SharedPreferences.getInstance();
-    token = pref.getString("authToken")!;
+    // token = pref.getString("authToken")!;
     myId = pref.getString("_id")!;
 
     return null;
   }
 
-  static Map<String, String> header = {'Authorization': "Bearer " + token};
+  static Future<Map<String, String>> getHeaders() async {
+    pref = await SharedPreferences.getInstance();
+    String token = pref.getString("authToken")!;
+    return {'Authorization': "Bearer " + token};
+  }
+
+  // static Map<String, String> header = {'Authorization': "Bearer " + token};
   static Future<User?> getUserData() async {
     try {
       await StudentServices.myShredPrefs();
-      dev.log(token);
+      var header = await getHeaders();
       dev.log(myId);
       var res = await http.get(Uri.parse(urlAddress + "/users/profile"),
           headers: header);
@@ -98,24 +105,49 @@ class StudentServices {
   }
 
   static Future<List<Communites>?> getCommunityList() async {
-    try {
-      var res =
-          await http.get(Uri.parse(urlAddress + "/build/list-communities"));
+    // try {
+    print("ff");
+    var header = await getHeaders();
+    var res = await http.get(
+        Uri.parse(urlAddress + "/build/not-joined-community"),
+        headers: header);
 
-      if (res.statusCode == 200) {
-        var data = json.decode(res.body);
-        List<Communites> daa = [];
-        data['communities'].forEach((e) {
-          daa.add(Communites.fromJson(e));
-        });
-        return daa;
-      }
-      return null;
-    } catch (e) {
-      dev.log(e.toString());
-      dev.log("get Community");
-      return null;
+    print("ff");
+
+    if (res.statusCode == 200) {
+      var data = json.decode(res.body);
+      List<Communites> daa = [];
+      data.forEach((e) {
+        daa.add(Communites.fromJson(e));
+      });
+      dev.log(res.body);
+
+      return daa;
     }
+    dev.log(res.body.toString());
+    dev.log("get Community");
+    return null;
+    // } catch (e) {
+    //   dev.log(e.toString());
+    //   dev.log("get Community");
+    //   return null;
+    // }
+  }
+
+  static List<Communites> shuffleList(List<Communites> list) {
+    // Create a copy of the original list to shuffle
+    List<Communites> shuffled = List<Communites>.from(list);
+    Random random = Random();
+
+    for (int i = shuffled.length - 1; i > 0; i--) {
+      int j = random.nextInt(i + 1);
+      // Swap elements
+      var temp = shuffled[i];
+      shuffled[i] = shuffled[j];
+      shuffled[j] = temp;
+    }
+
+    return shuffled; // Return the shuffled list
   }
 
   static Future<List<Post1>?> getSpecificCommunityAllPost(String id) async {
@@ -228,6 +260,7 @@ class StudentServices {
   static Future<Map<String, String>> createCommunity(
       Map<String, dynamic> data) async {
     try {
+      var header = await getHeaders();
       var req = http.MultipartRequest(
         "POST",
         Uri.parse(urlAddress + "/build/create-community"),
@@ -262,6 +295,7 @@ class StudentServices {
         "POST",
         Uri.parse(urlAddress + "/build/events"),
       );
+      var header = await getHeaders();
       req.headers.addAll(header);
       req.fields['title'] = data['title'];
       req.fields['description'] = data['description'];
@@ -292,6 +326,7 @@ class StudentServices {
         "POST",
         Uri.parse(urlAddress + "/build/createPost"),
       );
+      var header = await getHeaders();
       req.headers.addAll(header);
       req.fields['title'] = data['title'];
       req.fields['content'] = data['description'];
@@ -317,6 +352,7 @@ class StudentServices {
 
   static Future<Map<String, String>> joinCommunity(String id) async {
     try {
+      var header = await getHeaders();
       print({"communityId": id});
       var res = await http.post(
         Uri.parse(urlAddress + "/build/join-community/" + id),
@@ -339,6 +375,7 @@ class StudentServices {
 
   static Future<List<Communites>?> getMyCommunities() async {
     try {
+      var header = await getHeaders();
       var res = await http.get(Uri.parse(urlAddress + "/build/get-community"),
           headers: header);
       print(res.statusCode);
@@ -367,15 +404,16 @@ class StudentServices {
 
   static Future<List<Communites>?> getMyCommunitiesJoined() async {
     // try {
-    var res = await http.get(
-        Uri.parse(urlAddress + "/build/getJoined-community"),
+    var header = await getHeaders();
+    var res = await http.get(Uri.parse(urlAddress + "/build/list-communities"),
         headers: header);
 
     print(res.statusCode);
+    dev.log(res.body);
     if (res.statusCode == 200) {
       List<Communites> p = [];
       var data = json.decode(res.body);
-      data.forEach((e) {
+      data['communities'].forEach((e) {
         p.add(Communites.fromJson(e));
       });
       return p;
