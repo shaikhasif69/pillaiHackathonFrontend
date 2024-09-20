@@ -31,7 +31,10 @@ class _CommnuintyPage extends ConsumerState<CommnuintyPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: IconButton(
                     icon: Icon(Icons.group),
-                    onPressed: () {},
+                    onPressed: () {
+                      GoRouter.of(context)
+                          .pushNamed(StudentsRoutes.StudentFourm);
+                    },
                   ),
                 ),
                 actions: [
@@ -46,7 +49,10 @@ class _CommnuintyPage extends ConsumerState<CommnuintyPage> {
                   Card(
                       child: IconButton(
                           iconSize: 30,
-                          onPressed: () {},
+                          onPressed: () {
+                            GoRouter.of(context)
+                                .pushNamed(StudentsRoutes.chattingList);
+                          },
                           icon: Icon(Icons.notifications_outlined)))
                 ],
               ),

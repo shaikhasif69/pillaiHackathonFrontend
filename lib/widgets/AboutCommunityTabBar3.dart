@@ -55,10 +55,11 @@ class _AboutCommunityTabBar2 extends ConsumerState<Aboutcommunitytabbar3> {
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: data[index].imageUrl != null
-                                        ? NetworkImage(data[index].imageUrl!)
-                                        : AssetImage(
-                                            "assets/images/Male User.png"))),
+                                    image: data[index].imageUrl == null ||
+                                            data[index].imageUrl == ""
+                                        ? AssetImage(
+                                            "assets/images/Male User.png")
+                                        : NetworkImage(data[index].imageUrl!))),
                           ),
                         ),
                         Divider()

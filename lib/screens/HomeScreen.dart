@@ -25,15 +25,107 @@ class _HomeScreen extends ConsumerState<Homescreen> {
     return Scaffold(
       drawer: Drawer(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 400,
+            Expanded(
+              flex: 30,
+              child: DrawerHeader(
+                  padding: EdgeInsets.fromLTRB(40.0, 16.0, 16.0, 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                      ),
+                      Container(
+                        width: 90,
+                        height: 90,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(21)),
+                            image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: AssetImage(
+                                    "assets/images/council (1).png"))),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "Ryaan Patel",
+                        style: GoogleFonts.mulish(
+                            fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "rayan@gaimil.com",
+                        style: GoogleFonts.mulish(
+                            fontSize: 14,
+                            color: const Color.fromARGB(255, 124, 124, 124)),
+                      )
+                    ],
+                  )),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  GoRouter.of(context).pushNamed(StudentsRoutes.community);
-                },
-                child: Text("Communities"))
+            Expanded(
+              flex: 70,
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: Icon(Icons.file_copy),
+                    title: Text(
+                      "Profile",
+                      style: GoogleFonts.abel(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.file_copy),
+                    title: Text(
+                      "Communities",
+                      style: GoogleFonts.abel(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.file_copy),
+                    title: Text(
+                      "Student Forum",
+                      style: GoogleFonts.abel(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.file_copy),
+                    title: Text(
+                      "Chats",
+                      style: GoogleFonts.abel(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.file_copy),
+                    title: Text(
+                      "Opportunities",
+                      style: GoogleFonts.abel(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.file_copy),
+                    title: Text(
+                      "settings",
+                      style: GoogleFonts.abel(fontSize: 16),
+                    ),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.file_copy),
+                    title: Text(
+                      "Helps & FAQs",
+                      style: GoogleFonts.abel(fontSize: 16),
+                    ),
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        GoRouter.of(context)
+                            .pushNamed(StudentsRoutes.community);
+                      },
+                      child: Text("Communities")),
+                ],
+              ),
+            )
           ],
         ),
       ),

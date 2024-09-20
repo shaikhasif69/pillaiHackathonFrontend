@@ -85,14 +85,21 @@ class _CommunityTab1 extends ConsumerState<CommunityTab1> {
                                                       SizedBox(
                                                         height: 150,
                                                       ),
-                                                      Text(
-                                                        data[index].name!,
-                                                        style:
-                                                            GoogleFonts.mulish(
-                                                                fontSize: 18,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
+                                                      SizedBox(
+                                                        height: 38,
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          child: Text(
+                                                            data[index].name!,
+                                                            style: GoogleFonts
+                                                                .mulish(
+                                                                    fontSize:
+                                                                        18,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                          ),
+                                                        ),
                                                       ),
                                                       Text(
                                                         "124" + " Members",

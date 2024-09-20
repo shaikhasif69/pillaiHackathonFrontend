@@ -46,7 +46,7 @@ class _InputTextContainer extends State<InputTextContainer> {
   @override
   void dispose() {
     _focusNode.dispose();
-    FocusScope.of(context).unfocus();
+    // FocusScope.of(context).unfocus();
     super.dispose();
   }
 
@@ -79,9 +79,12 @@ class _InputTextContainer extends State<InputTextContainer> {
                     const EdgeInsets.symmetric(vertical: 18, horizontal: 60),
                 suffixIcon: widget.isPassword
                     ? IconButton(
-                        icon: Icon(isPasswordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off, color: MyColors.ourPrimary,),
+                        icon: Icon(
+                          isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: MyColors.ourPrimary,
+                        ),
                         onPressed: () {
                           setState(() {
                             isPasswordVisible = !isPasswordVisible;
@@ -89,13 +92,14 @@ class _InputTextContainer extends State<InputTextContainer> {
                         },
                       )
                     : null,
-                prefixIcon:  Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                prefixIcon: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   child: Icon(
                     widget.isPassword
                         ? Icons.lock_outline
                         : Icons.account_box_outlined,
-                        color: MyColors.ourPrimary,
+                    color: MyColors.ourPrimary,
                   ),
                 ),
                 focusedBorder: InputBorder.none,

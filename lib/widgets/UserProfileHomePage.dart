@@ -36,7 +36,9 @@ class _UserProfilePage extends ConsumerState<UserProfileHomePage> {
                       borderRadius: const BorderRadius.all(Radius.circular(30)),
                       image: DecorationImage(
                           fit: BoxFit.cover,
-                          image: NetworkImage(data.imageUrl))),
+                          image: data.imageUrl == null || data.imageUrl == ""
+                              ? AssetImage("assets/images/ACADEMICVERSE.png")
+                              : NetworkImage(data.imageUrl))),
                 ),
               ),
               Padding(

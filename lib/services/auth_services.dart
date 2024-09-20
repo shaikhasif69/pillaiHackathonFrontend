@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
+import 'package:pillai_hackcelestial/Services/student.dart';
+import 'package:pillai_hackcelestial/constant.dart';
 import 'package:pillai_hackcelestial/models/faculty.dart';
 import 'package:pillai_hackcelestial/models/student.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  final String baseUrl = 'http://192.168.0.108:3000';
+  final String baseUrl = urlAddress;
 
   Future<Map<String, dynamic>> signup(
       String email, String username, String password) async {
@@ -47,81 +49,82 @@ class AuthService {
     }
   }
 
-  // sign in functino here ! 
-
+  // sign in functino here !
 
   Future<Map<String, dynamic>> signIn(String email, String password) async {
-    try {
-      print("getting data here: " + email + " " + password);
-      var temail = email.trim();
-      var tpassword = password.toString();
-      final response = await http.post(
-        Uri.parse('$baseUrl/users/signin'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'email': temail,
-          'password': tpassword,
-        }),
-      );
+    // try {
+    print("getting data here: " + email + " " + password);
+    var temail = email.trim();
+    var tpassword = password.toString();
+    final response = await http.post(
+      Uri.parse('$baseUrl/users/signin'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'email': temail,
+        'password': tpassword,
+      }),
+    );
 
-      if (response.statusCode == 201) {
-        print("got and succesfful?");
-        final body = jsonDecode(response.body);
-        final user = body['user'];
-        final token = body['token'];
+    if (response.statusCode == 201) {
+      print("got and succesfful?");
+      final body = jsonDecode(response.body);
+      final user = body['user'];
+      final userId = body['user']['_id'];
+      final token = body['token'];
 
-        // Save token to SharedPreferences
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('authToken', token);
+      // Save token to SharedPreferences
+      ;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('authToken', token);
+      await prefs.setString("_id", userId);
 
-        // Save user data to Hive
-        if (email.contains('@student')) {
-          var studentBox = await Hive.openBox<Student>('studentsBox');
-          studentBox.put(
-            'student',
-            Student(
-              id: user['_id'],
-              username: user['username'],
-              name: "",
-              email: user['email'],
-              department: "",
-              year: "",
-              address: "",
-              handicapped: false,
-            ),
-          );
-        } else {
-          var facultyBox = await Hive.openBox<Faculty>('facultyBox');
-          facultyBox.put(
-            'faculty',
-            Faculty(
-              id: user['_id'],
-              username: user['username'],
-              name: user['name'],
-              email: user['email'],
-              department: user['department'],
-              subjects: List<String>.from(user['subjects']),
-              experience: user['experience'],
-              gender: user['gender'],
-            ),
-          );
-        }
-
-        return {'success': true, 'user': user, 'token': token};
+      // Save user data to Hive
+      if (email.contains('@student')) {
+        var studentBox = await Hive.openBox<Student>('studentsBox');
+        studentBox.put(
+          'student',
+          Student(
+            id: user['_id'],
+            username: user['username'],
+            name: "",
+            email: user['email'],
+            department: "",
+            year: "",
+            address: "",
+            handicapped: false,
+          ),
+        );
       } else {
-        print("what is the issue???");
-        return {
-          'success': false,
-          'message': jsonDecode(response.body)['message'],
-        };
+        var facultyBox = await Hive.openBox<Faculty>('facultyBox');
+        facultyBox.put(
+          'faculty',
+          Faculty(
+            id: user['_id'],
+            username: user['username'],
+            name: user['name'],
+            email: user['email'],
+            department: user['department'],
+            subjects: List<String>.from(user['subjects']),
+            experience: user['experience'],
+            gender: user['gender'],
+          ),
+        );
       }
-    } catch (error) {
-      return {'success': false, 'message': 'An error occurred.'};
+
+      return {'success': true, 'user': user, 'token': token};
+    } else {
+      print("what is the issue???");
+      return {
+        'success': false,
+        'message': jsonDecode(response.body)['message'],
+      };
     }
+    // } catch (error) {
+    //   return {'success': false, 'message': 'An error occurred.'};
+    // }
   }
-  
 
   Future<Map<String, dynamic>> verifyOTP(String email, String otp) async {
     try {
@@ -158,7 +161,6 @@ class AuthService {
       };
     }
   }
-
 
   Future<Map<String, dynamic>> submitUserForm(
     String userId,
@@ -214,5 +216,4 @@ class AuthService {
       };
     }
   }
-  
 }

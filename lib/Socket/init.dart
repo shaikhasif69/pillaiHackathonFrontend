@@ -2,7 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pillai_hackcelestial/Services/student.dart';
 import 'package:pillai_hackcelestial/constant.dart';
 import 'package:pillai_hackcelestial/model/Disscussion.dart';
+import 'package:pillai_hackcelestial/model/StudentFourm.dart';
+import 'package:pillai_hackcelestial/models/chattingModel.dart';
+import 'package:pillai_hackcelestial/providers/ChattingProvider.dart';
 import 'package:pillai_hackcelestial/providers/DiscussionProvider.dart';
+import 'package:pillai_hackcelestial/providers/StudenFourmProvider.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'dart:convert';
@@ -42,8 +46,18 @@ String token =
 class mySocketConnect {
   static late Socket socket;
   static late WidgetRef ref;
+  static late WidgetRef ref3;
+  static late WidgetRef ref2;
   static void getDissInit(WidgetRef refff) {
     ref = refff;
+  }
+
+  static void getChatinit(WidgetRef reffff) {
+    ref2 = reffff;
+  }
+
+  static void getFourmInit(WidgetRef reffff) {
+    ref3 = reffff;
   }
 
   static void connect() async {
@@ -68,13 +82,29 @@ class mySocketConnect {
 
     mySocketConnect.socket.on('message', (data) {
       developer.log("New message received" + data.toString());
-      if (data.containsKey("disussion")) {
-        if (data['disussion'] == true) {
+
+      developer.log(data['discussion'].toString());
+      if (data.containsKey("discussion")) {
+        if (data['discussion'] == true) {
           ref
               .read(DiscussionProvider.notifier)
               .updateChats(Discussion.fromJson(data));
+        } else {
+          ref2
+              .read(ChattingProvider.notifier)
+              .updateChats(ChattingModel.fromJson(data));
         }
       }
+    });
+
+    mySocketConnect.socket.on("newMessage", (message) {
+      if (message != null) {
+        developer.log(message.toString());
+        ref3
+            .read(StudentForumDiscussionProvider.notifier)
+            .updateChats(StudentFourmModel.fromJson(message));
+      }
+      ;
     });
   }
 }

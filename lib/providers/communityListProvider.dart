@@ -32,12 +32,18 @@ class CommunityListNotifier extends StateNotifier<List<Communites>?> {
 
 class MyCommunityListNotifier extends StateNotifier<List<Communites>?> {
   MyCommunityListNotifier() : super(null);
-
+  bool createdCommunity = true;
+  // bool joinedCommunity = true;
   getCommutityList() async {
-    List<Communites>? data;
+    state = null;
 
-    data = await StudentServices.getMyCommunities();
-    state = data;
+    state = await StudentServices.getMyCommunities();
+  }
+
+  getJoinerCommunityList() async {
+    state = null;
+
+    state = await StudentServices.getMyCommunitiesJoined();
   }
 }
 

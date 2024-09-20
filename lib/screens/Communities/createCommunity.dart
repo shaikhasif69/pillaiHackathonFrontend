@@ -21,7 +21,7 @@ class _JoinCommunities extends ConsumerState<CreateCommunity> {
   TextEditingController facultyName = new TextEditingController();
   TextEditingController title = new TextEditingController();
   TextEditingController description = new TextEditingController();
-  String v = "cultural";
+  String v = "sports";
   final ImagePicker _picker = ImagePicker();
   XFile? _image;
   Future getImageFromGallery() async {
@@ -251,16 +251,16 @@ class _JoinCommunities extends ConsumerState<CreateCommunity> {
                                   },
                                   items: [
                                     DropdownMenuItem(
-                                      child: Text("cultural"),
-                                      value: "cultural",
+                                      child: Text("Sports"),
+                                      value: "sports",
                                     ),
                                     DropdownMenuItem(
-                                        child: Text("tech"), value: "tech"),
+                                        child: Text("technology"),
+                                        value: "technology"),
                                     DropdownMenuItem(
-                                        child: Text("dance"), value: "dance"),
+                                        child: Text("coding"), value: "coding"),
                                     DropdownMenuItem(
-                                        child: Text("singing"),
-                                        value: "singing")
+                                        child: Text("music"), value: "music")
                                   ],
                                 ),
                               ),

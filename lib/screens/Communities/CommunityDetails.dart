@@ -27,9 +27,14 @@ class _CommnunityDetails extends ConsumerState<CommnunityDetails> {
       backgroundColor: Color.fromARGB(255, 182, 90, 207),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 182, 90, 207),
-        leading: Card(
-            color: const Color.fromARGB(255, 81, 169, 84),
-            child: Icon(color: Colors.white, Icons.arrow_back)),
+        leading: InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Card(
+              color: const Color.fromARGB(255, 81, 169, 84),
+              child: Icon(color: Colors.white, Icons.arrow_back)),
+        ),
         actions: [
           Card(
               color: const Color.fromARGB(255, 81, 169, 84),
@@ -74,6 +79,13 @@ class _CommnunityDetails extends ConsumerState<CommnunityDetails> {
                       ),
                       Text(
                         "124 Active Members",
+                        style: GoogleFonts.mulish(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                      Text(
+                        "Created By- " + widget.data.creator!.username!,
                         style: GoogleFonts.mulish(
                           color: Colors.white,
                           fontSize: 14,

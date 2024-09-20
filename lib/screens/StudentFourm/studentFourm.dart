@@ -7,17 +7,17 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/Services/student.dart';
 import 'package:pillai_hackcelestial/Socket/init.dart';
 import 'package:pillai_hackcelestial/model/Disscussion.dart';
-import 'package:pillai_hackcelestial/model/StudentFourm.dart';
 import 'package:pillai_hackcelestial/model/community.dart';
 import 'package:pillai_hackcelestial/screens/committe/create/createCommitteform.dart';
 import 'package:pillai_hackcelestial/widgets/AboutCommunityTabBar1.dart';
 import 'package:pillai_hackcelestial/widgets/AboutCommunityTabBar2.dart';
 import 'package:pillai_hackcelestial/widgets/AboutCommunityTabBar3.dart';
 import 'package:pillai_hackcelestial/widgets/DiscussionChatList.dart';
+import 'package:pillai_hackcelestial/widgets/StudentFourmDisscussionList.dart';
 
-class Mycommunity extends ConsumerStatefulWidget {
-  final Communites data;
-  Mycommunity({required this.data});
+class StudentForum extends ConsumerStatefulWidget {
+  // final Communites data;
+  StudentForum();
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
     return _MyCommunity();
@@ -26,8 +26,9 @@ class Mycommunity extends ConsumerStatefulWidget {
   }
 }
 
-class _MyCommunity extends ConsumerState<Mycommunity>
+class _MyCommunity extends ConsumerState<StudentForum>
     with SingleTickerProviderStateMixin {
+  String _id = "66ec6bdcc5d98d852110ac6e";
   late ScrollController dicCon;
   late ScrollController nested;
   late TextEditingController msg;
@@ -37,9 +38,10 @@ class _MyCommunity extends ConsumerState<Mycommunity>
     msg = TextEditingController();
     nested = ScrollController();
     dicCon = ScrollController()..addListener(listCon);
-    mySocketConnect.socket.emit('joinRoom', {
-      'roomId': widget.data.sId,
-      'userId': StudentServices.myId,
+    mySocketConnect.getFourmInit(ref);
+    mySocketConnect.socket.emit("joinstudentGroup", {
+      "groupId": _id,
+      "userId": StudentServices.myId,
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -48,10 +50,10 @@ class _MyCommunity extends ConsumerState<Mycommunity>
   }
 
   void sendMessage(String message) {
-    print("msg sent");
+    print("msg sent studentForm");
     if (message.isNotEmpty) {
-      mySocketConnect.socket.emit('message', {
-        'roomId': widget.data.sId,
+      mySocketConnect.socket.emit('sendMessage', {
+        'groupId': _id,
         'userId': StudentServices.myId,
         'content': message,
       });
@@ -89,11 +91,21 @@ class _MyCommunity extends ConsumerState<Mycommunity>
       backgroundColor: Color.fromARGB(255, 250, 248, 241),
       body: SafeArea(
         child: DefaultTabController(
-          length: 4,
+          length: 3,
           child: NestedScrollView(
             controller: nested,
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
+                SliverAppBar(
+                  title: Text(
+                    "S T U D E N T   F O R U M",
+                    style: GoogleFonts.mulish(
+                        fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Color.fromARGB(255, 154, 160, 154),
+                  centerTitle: true,
+                ),
                 // SliverAppBar(
                 //   // forceElevated: innerBoxIsScrolled,
                 //   // pinned: true,
@@ -126,70 +138,31 @@ class _MyCommunity extends ConsumerState<Mycommunity>
                 SliverAppBar(
                   // pinned: true,
                   automaticallyImplyLeading: false,
-                  backgroundColor: Color.fromARGB(255, 182, 90, 207),
+                  backgroundColor: Color.fromARGB(255, 154, 160, 154),
                   expandedHeight: 300,
                   bottom: PreferredSize(
                     preferredSize: Size(double.infinity, 300),
                     child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image:
+                                  AssetImage("assets/images/council (1).png"))),
                       // color: Colors.amber,
                       height: 300,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 70,
-                                  ),
-                                  Container(
-                                    width: 200,
-                                    child: Text(
-                                      // widget.data.name!,
-                                      widget.data.name!,
-
-                                      style: GoogleFonts.mulish(
-                                          color: Colors.white,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  Text(
-                                    "124 Active Members",
-                                    style: GoogleFonts.mulish(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  Text(
-                                    "Sunil",
-                                    style: GoogleFonts.mulish(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  Text(
-                                    "-Created by",
-                                    style: GoogleFonts.mulish(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                  )
-                                ],
-                              ),
                               // Spacer(),
                               Container(
                                 height: 200,
                                 width: 200,
                                 decoration: BoxDecoration(
                                     // color: Colors.amber,
-                                    image: DecorationImage(
-                                        // image: widget.data.imageUrl == null?
-                                        image: AssetImage(
-                                            "assets/images/lgbtq-community-attractive-queer-man-with-flitter-face-waving-pride-rainbow-flag-looking-c-modified 1.png"))),
+                                    ),
                               )
                             ],
                           ),
@@ -208,7 +181,7 @@ class _MyCommunity extends ConsumerState<Mycommunity>
                                 // color: Colors.amber,
                                 child: SingleChildScrollView(
                                   child: Text(
-                                    widget.data.description!,
+                                    "The PCE Student Forum is an exclusive online platform designed to foster collaboration, knowledge-sharing, and interaction among students of Pillai College of Engineering (PCE). This forum serves as a hub where students from different branches and years can come together to exchange ideas, solve academic challenges, and build lasting connections.",
                                     textAlign: TextAlign.start,
                                     // overflow: TextOverflow.ellipsis,
                                     style: GoogleFonts.mulish(
@@ -251,10 +224,7 @@ class _MyCommunity extends ConsumerState<Mycommunity>
                               Text(
                                 "Discussion",
                               ),
-                              Text("Post"),
-                              Text(
-                                "Events",
-                              ),
+                              Text("Polls"),
                               Text(
                                 "Members",
                               ),
@@ -275,31 +245,28 @@ class _MyCommunity extends ConsumerState<Mycommunity>
             body: TabBarView(
               // physics: NeverScrollableScrollPhysics(),
               children: [
-                Discussionchatlist(
+                StudentFourmDiscussionchatlist(
                   nest: nested,
-                  communityId: widget.data.sId!,
+                  communityId: _id,
                   desCo: dicCon,
                   sendMessage: sendMessage,
                 ),
+                Text("Polll"),
                 Column(
                   children: [
                     SizedBox(height: 80),
                     Expanded(
-                        child: Aboutcommunitytabbar1(id: widget.data.sId!)),
-                  ],
-                ),
-                Column(
-                  children: [
-                    SizedBox(height: 80),
-                    Expanded(
-                        child: Aboutcommunitytabbar2(id: widget.data.sId!)),
-                  ],
-                ),
-                Column(
-                  children: [
-                    SizedBox(height: 80),
-                    Expanded(
-                        child: Aboutcommunitytabbar3(id: widget.data.sId!)),
+                        child: ListView.builder(itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage:
+                              AssetImage("assets/images/council (1).png"),
+                          radius: 30,
+                        ),
+                        title: Text("Hari OM"),
+                        subtitle: Text("G-sec"),
+                      );
+                    })),
                   ],
                 ),
               ],

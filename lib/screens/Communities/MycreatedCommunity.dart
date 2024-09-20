@@ -3,21 +3,22 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/Services/student.dart';
 import 'package:pillai_hackcelestial/Socket/init.dart';
 import 'package:pillai_hackcelestial/model/Disscussion.dart';
-import 'package:pillai_hackcelestial/model/StudentFourm.dart';
 import 'package:pillai_hackcelestial/model/community.dart';
+import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/screens/committe/create/createCommitteform.dart';
 import 'package:pillai_hackcelestial/widgets/AboutCommunityTabBar1.dart';
 import 'package:pillai_hackcelestial/widgets/AboutCommunityTabBar2.dart';
 import 'package:pillai_hackcelestial/widgets/AboutCommunityTabBar3.dart';
 import 'package:pillai_hackcelestial/widgets/DiscussionChatList.dart';
 
-class Mycommunity extends ConsumerStatefulWidget {
+class MyCreatedCommunityPage extends ConsumerStatefulWidget {
   final Communites data;
-  Mycommunity({required this.data});
+  MyCreatedCommunityPage({required this.data});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
     return _MyCommunity();
@@ -26,7 +27,7 @@ class Mycommunity extends ConsumerStatefulWidget {
   }
 }
 
-class _MyCommunity extends ConsumerState<Mycommunity>
+class _MyCommunity extends ConsumerState<MyCreatedCommunityPage>
     with SingleTickerProviderStateMixin {
   late ScrollController dicCon;
   late ScrollController nested;
@@ -123,13 +124,78 @@ class _MyCommunity extends ConsumerState<Mycommunity>
                 //                 Icons.settings))),
                 //   ],
                 // ),
+                SliverToBoxAdapter(
+                  child: Container(
+                    color: Color.fromARGB(255, 182, 90, 207),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            GoRouter.of(context).pushNamed(
+                                StudentsRoutes.createEvent,
+                                extra: widget.data);
+                          },
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                "assets/images/calendar.png"))),
+                                  ),
+                                  Text("ADD EVENT")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            GoRouter.of(context).pushNamed(
+                                StudentsRoutes.addCommunityPost,
+                                extra: widget.data);
+                          },
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 50,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                "assets/images/calendar.png"))),
+                                  ),
+                                  Text("ADD Post")
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 SliverAppBar(
                   // pinned: true,
                   automaticallyImplyLeading: false,
                   backgroundColor: Color.fromARGB(255, 182, 90, 207),
-                  expandedHeight: 300,
+                  // backgroundColor: Colors.amber,
+                  expandedHeight: 250,
                   bottom: PreferredSize(
-                    preferredSize: Size(double.infinity, 300),
+                    preferredSize: Size(double.infinity, 250),
                     child: Container(
                       // color: Colors.amber,
                       height: 300,
@@ -142,9 +208,6 @@ class _MyCommunity extends ConsumerState<Mycommunity>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
-                                    height: 70,
-                                  ),
                                   Container(
                                     width: 200,
                                     child: Text(
@@ -164,20 +227,6 @@ class _MyCommunity extends ConsumerState<Mycommunity>
                                       fontSize: 14,
                                     ),
                                   ),
-                                  Text(
-                                    "Sunil",
-                                    style: GoogleFonts.mulish(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                  Text(
-                                    "-Created by",
-                                    style: GoogleFonts.mulish(
-                                      color: Colors.white,
-                                      fontSize: 14,
-                                    ),
-                                  )
                                 ],
                               ),
                               // Spacer(),
@@ -188,8 +237,12 @@ class _MyCommunity extends ConsumerState<Mycommunity>
                                     // color: Colors.amber,
                                     image: DecorationImage(
                                         // image: widget.data.imageUrl == null?
-                                        image: AssetImage(
-                                            "assets/images/lgbtq-community-attractive-queer-man-with-flitter-face-waving-pride-rainbow-flag-looking-c-modified 1.png"))),
+                                        image: widget.data.imageUrl == null ||
+                                                widget.data.imageUrl == ""
+                                            ? AssetImage(
+                                                "assets/images/lgbtq-community-attractive-queer-man-with-flitter-face-waving-pride-rainbow-flag-looking-c-modified 1.png")
+                                            : NetworkImage(
+                                                widget.data.imageUrl!))),
                               )
                             ],
                           ),

@@ -7,11 +7,13 @@ import 'package:pillai_hackcelestial/screens/Communities/MyCommunity.dart';
 
 class Discussionchatlist extends ConsumerStatefulWidget {
   ScrollController desCo;
+  ScrollController nest;
   Function sendMessage;
   String communityId;
   Discussionchatlist(
       {required this.communityId,
       required this.desCo,
+      required this.nest,
       required this.sendMessage});
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -39,6 +41,7 @@ class _Discussionchatlist extends ConsumerState<Discussionchatlist> {
 
   Widget build(context) {
     var data = ref.watch(DiscussionProvider);
+    // print(data!.length.toString());
     print("build");
     return data == null
         ? Center(child: CircularProgressIndicator())
@@ -67,16 +70,6 @@ class _Discussionchatlist extends ConsumerState<Discussionchatlist> {
                           // Calculate the reversed index
                           final reversedIndex = data.length - 1 - index;
 
-                          print(data[reversedIndex].content! +
-                              " myId: " +
-                              StudentServices.myId +
-                              " msgId: " +
-                              data[reversedIndex].userId! +
-                              " " +
-                              (StudentServices.myId ==
-                                      data[reversedIndex].userId)
-                                  .toString());
-
                           if (StudentServices.myId !=
                               data[reversedIndex].userId) {
                             return senderCard(d: data[reversedIndex]);
@@ -93,23 +86,34 @@ class _Discussionchatlist extends ConsumerState<Discussionchatlist> {
                     child: Row(
                       children: [
                         Expanded(
-                          child: TextFormField(
-                            controller: msg,
-                            decoration: InputDecoration(
-                                fillColor: Color.fromARGB(255, 250, 248, 241),
-                                hintText: "Save Cat",
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 169, 137, 250)),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color:
-                                            Color.fromARGB(255, 169, 137, 250)),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(60)))),
+                          child: Focus(
+                            onFocusChange: (b) {},
+                            child: TextFormField(
+                              onTap: () {
+                                widget.nest
+                                  ..animateTo(
+                                    widget.nest.position.maxScrollExtent,
+                                    duration: Duration(seconds: 1),
+                                    curve: Curves.easeOut,
+                                  );
+                              },
+                              controller: msg,
+                              decoration: InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 248, 241),
+                                  hintText: "Save Cat",
+                                  enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                              255, 169, 137, 250)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(40))),
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Color.fromARGB(
+                                              255, 169, 137, 250)),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(60)))),
+                            ),
                           ),
                         ),
                         IconButton(

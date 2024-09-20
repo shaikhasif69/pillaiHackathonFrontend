@@ -1,11 +1,18 @@
 import 'package:pillai_hackcelestial/model/community.dart';
+import 'package:pillai_hackcelestial/models/UserChatList.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:pillai_hackcelestial/screens/Chatin/ChattingPage.dart';
+import 'package:pillai_hackcelestial/screens/Chatin/chatList.dart';
+import 'package:pillai_hackcelestial/screens/Communities/AddPost.dart';
 import 'package:pillai_hackcelestial/screens/Communities/Commnuinty.dart';
 import 'package:pillai_hackcelestial/screens/Communities/CommunityDetails.dart';
 import 'package:pillai_hackcelestial/screens/Communities/MyCommunity.dart';
 import 'package:pillai_hackcelestial/screens/Communities/createCommunity.dart';
+import 'package:pillai_hackcelestial/screens/Communities/MycreatedCommunity.dart';
+import 'package:pillai_hackcelestial/screens/Event/createEvent.dart';
 import 'package:pillai_hackcelestial/screens/HomeScreen.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
+import 'package:pillai_hackcelestial/screens/StudentFourm/studentFourm.dart';
 import 'package:pillai_hackcelestial/screens/Students/multi_step_form.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
 import 'package:pillai_hackcelestial/screens/college_id_login.dart';
@@ -24,7 +31,7 @@ class MyGoRouter {
     GoRoute(
       path: CommonRoutes.splashScreen,
       name: CommonRoutes.splashScreen,
-      builder: (context, state) => Homescreen(),
+      builder: (context, state) => SplashScreen(),
     ),
     GoRoute(
       path: StudentsRoutes.communityDetails,
@@ -32,6 +39,14 @@ class MyGoRouter {
       builder: (context, state) {
         Communites data = state.extra as Communites;
         return CommnunityDetails(data: data);
+      },
+    ),
+    GoRoute(
+      path: StudentsRoutes.addCommunityPost,
+      name: StudentsRoutes.addCommunityPost,
+      builder: (context, state) {
+        Communites data = state.extra as Communites;
+        return AddPost(data: data);
       },
     ),
     GoRoute(
@@ -151,11 +166,51 @@ class MyGoRouter {
         );
       },
     ),
+    GoRoute(
+        path: StudentsRoutes.myCreatedCommunity,
+        name: StudentsRoutes.myCreatedCommunity,
+        builder: (context, state) {
+          Communites data = state.extra as Communites;
+
+          return MyCreatedCommunityPage(data: data);
+        }),
 
     GoRoute(
       path: StudentsRoutes.studentHomePage,
       name: StudentsRoutes.studentHomePage,
-      builder: (context, state) => DummyHomePage(),
+      builder: (context, state) => Homescreen(),
+    ),
+    GoRoute(
+      path: StudentsRoutes.chattingList,
+      name: StudentsRoutes.chattingList,
+      builder: (context, state) => ChatList(),
+    ),
+    GoRoute(
+      path: StudentsRoutes.chattingPage,
+      name: StudentsRoutes.chattingPage,
+      builder: (context, state) {
+        UserChatList data = state.extra as UserChatList;
+        return ChattingPage(
+          user: data,
+        );
+      },
+    ),
+    GoRoute(
+      path: StudentsRoutes.StudentFourm,
+      name: StudentsRoutes.StudentFourm,
+      builder: (context, state) {
+        return StudentForum();
+      },
+    ),
+    GoRoute(
+      path: StudentsRoutes.createEvent,
+      name: StudentsRoutes.createEvent,
+      builder: (context, state) {
+        Communites data = state.extra as Communites;
+        return CreateEvent(
+          data: data,
+        );
+      },
     )
   ]);
 }

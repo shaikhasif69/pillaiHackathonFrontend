@@ -7,19 +7,34 @@ import 'package:pillai_hackcelestial/model/Event.dart';
 import 'package:pillai_hackcelestial/model/Faculty.dart';
 import 'package:pillai_hackcelestial/model/Member.dart';
 import 'package:pillai_hackcelestial/model/Post.dart';
+import 'package:pillai_hackcelestial/model/StudentFourm.dart';
 import 'package:pillai_hackcelestial/model/community.dart';
 import 'dart:developer' as dev;
 
 import 'package:pillai_hackcelestial/model/user.dart';
+import 'package:pillai_hackcelestial/models/UserChatList.dart';
+import 'package:pillai_hackcelestial/models/chattingModel.dart';
+import 'package:pillai_hackcelestial/screens/Chatin/chatList.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StudentServices {
-  static String myId = "66e6926336455070e72e4bcb";
-  static Map<String, String> header = {
-    'Authorization':
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hYWRhcnNoMjNjb21wQHN0dWRlbnQubWVzLmFjLmluIiwiaWQiOiI2NmU2OTI2MzM2NDU1MDcwZTcyZTRiY2IiLCJpYXQiOjE3MjY2NDYyNTcsImV4cCI6MTcyOTIzODI1N30.GVoAuF2PgiEnUfg1jOecZDVVnkrQkNr0Qj7en7PBMCc"
-  };
+  static late String myId;
+  static late SharedPreferences pref;
+  static late String token;
+  static Future<void> myShredPrefs() async {
+    pref = await SharedPreferences.getInstance();
+    token = pref.getString("authToken")!;
+    myId = pref.getString("_id")!;
+
+    return null;
+  }
+
+  static Map<String, String> header = {'Authorization': "Bearer " + token};
   static Future<User?> getUserData() async {
     try {
+      await StudentServices.myShredPrefs();
+      dev.log(token);
+      dev.log(myId);
       var res = await http.get(Uri.parse(urlAddress + "/users/profile"),
           headers: header);
       if (res.statusCode == 200) {
@@ -58,6 +73,25 @@ class StudentServices {
     } catch (e) {
       dev.log(e.toString());
       dev.log("get faculty");
+      return null;
+    }
+  }
+
+  static Future<List<UserChatList>?> getUSerListForChat() async {
+    try {
+      var res = await http.get(Uri.parse(urlAddress + "/admin/getAllUsers"));
+
+      if (res.statusCode == 200) {
+        List<UserChatList> data = [];
+        json.decode(res.body)['users'].forEach((e) {
+          data.add(UserChatList.fromJson(e));
+        });
+        return data;
+      }
+      return null;
+    } catch (e) {
+      dev.log(e.toString());
+      dev.log("get UserChatList");
       return null;
     }
   }
@@ -220,6 +254,66 @@ class StudentServices {
     }
   }
 
+  static Future<Map<String, String>> createEvent(
+      Map<String, dynamic> data) async {
+    try {
+      var req = http.MultipartRequest(
+        "POST",
+        Uri.parse(urlAddress + "/build/events"),
+      );
+      req.headers.addAll(header);
+      req.fields['title'] = data['title'];
+      req.fields['description'] = data['description'];
+      req.fields['date'] = data['date'];
+      req.fields['communityId'] = data['communityId'];
+      req.files.add(await http.MultipartFile.fromPath('image', data['image']));
+      var res = await req.send();
+      print(res.statusCode);
+      if (res.statusCode == 201) {
+        return {"status": "done"};
+      } else {
+        dev.log("Create event");
+        String resss = await res.stream.bytesToString();
+        dev.log(resss);
+        return {"status": "fail", "msg": json.decode(resss)['message']};
+      }
+    } catch (e) {
+      dev.log(e.toString());
+      dev.log("Create event");
+      return {"status": "fail"};
+    }
+  }
+
+  static Future<Map<String, String>> addCommunityPost(
+      Map<String, dynamic> data) async {
+    try {
+      var req = http.MultipartRequest(
+        "POST",
+        Uri.parse(urlAddress + "/build/createPost"),
+      );
+      req.headers.addAll(header);
+      req.fields['title'] = data['title'];
+      req.fields['content'] = data['description'];
+      req.fields['tags[]'] = data['tag'];
+      req.fields['communityId'] = data['communityId'];
+      req.files.add(await http.MultipartFile.fromPath('image', data['image']));
+      var res = await req.send();
+      print(res.statusCode);
+      if (res.statusCode == 200) {
+        return {"status": "done"};
+      } else {
+        dev.log("Create event");
+        String resss = await res.stream.bytesToString();
+        dev.log(resss);
+        return {"status": "fail", "msg": json.decode(resss)['message']};
+      }
+    } catch (e) {
+      dev.log(e.toString());
+      dev.log("Create event");
+      return {"status": "fail"};
+    }
+  }
+
   static Future<Map<String, String>> joinCommunity(String id) async {
     try {
       print({"communityId": id});
@@ -246,6 +340,7 @@ class StudentServices {
     try {
       var res = await http.get(Uri.parse(urlAddress + "/build/get-community"),
           headers: header);
+      print(res.statusCode);
       if (res.statusCode == 200) {
         List<Communites> p = [];
         var data = json.decode(res.body);
@@ -253,6 +348,10 @@ class StudentServices {
           p.add(Communites.fromJson(e));
         });
         return p;
+      } else if (res.statusCode == 404 &&
+          json.decode(res.body)['message'] ==
+              "No communities found for this user") {
+        return [];
       } else {
         dev.log(res.body);
         dev.log("GetMyCommunity");
@@ -263,6 +362,36 @@ class StudentServices {
       dev.log("GetMyCommunity");
       return null;
     }
+  }
+
+  static Future<List<Communites>?> getMyCommunitiesJoined() async {
+    // try {
+    var res = await http.get(
+        Uri.parse(urlAddress + "/build/getJoined-community"),
+        headers: header);
+
+    print(res.statusCode);
+    if (res.statusCode == 200) {
+      List<Communites> p = [];
+      var data = json.decode(res.body);
+      data.forEach((e) {
+        p.add(Communites.fromJson(e));
+      });
+      return p;
+    } else if (res.statusCode == 404 &&
+        json.decode(res.body)['message'] ==
+            "No communities found for this user") {
+      return [];
+    } else {
+      dev.log(res.body);
+      dev.log("GetMyCommunity");
+      return null;
+    }
+    // } catch (e) {
+    //   dev.log(e.toString());
+    //   dev.log("GetMyCommunity");
+    //   return null;
+    // }
   }
 
   static Future<List<Discussion>?> getDiscussionById(
@@ -287,5 +416,57 @@ class StudentServices {
       dev.log("getDisscuiionFormID");
       return null;
     }
+  }
+
+  static Future<List<StudentFourmModel>?> getStudentFourmchat() async {
+    try {
+      var res = await http.get(Uri.parse(
+          urlAddress + "/users/student-chat?groupId=66ec6bdcc5d98d852110ac6e"));
+      if (res.statusCode == 200) {
+        var data = json.decode(res.body);
+        List<StudentFourmModel> p = [];
+        data.forEach((e) {
+          p.add(StudentFourmModel.fromJson(e));
+        });
+        return p;
+      }
+      dev.log(res.body);
+      dev.log("getStudentFourm");
+      return null;
+    } catch (e) {
+      dev.log(e.toString());
+      dev.log("getStudentFourm");
+      return null;
+    }
+  }
+
+  static Future<List<ChattingModel>?> getMyChat(
+      {required userId, required taregetId}) async {
+    // try {
+    // print()
+    var res = await http.get(Uri.parse(urlAddress +
+        "/users/user-chat/?userId1=" +
+        userId +
+        "&userId2=" +
+        taregetId));
+    dev.log(res.body);
+    if (res.statusCode == 200) {
+      dev.log(res.body);
+      List<ChattingModel> data = [];
+      var d = json.decode(res.body);
+      d.forEach((e) {
+        data.add(ChattingModel.fromJson(e));
+      });
+      return data;
+    } else {
+      dev.log(res.body);
+      dev.log("Get MY Chat serverErr");
+      return null;
+    }
+    // } catch (e) {
+    //   dev.log(e.toString());
+    //   dev.log("Get MY Chat");
+    //   return null;
+    // }
   }
 }
