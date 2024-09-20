@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/model/Event.dart';
 import 'package:pillai_hackcelestial/models/event_model.dart';
 import 'package:pillai_hackcelestial/models/popular_model.dart';
+import 'package:pillai_hackcelestial/services/event_services.dart';
 import 'package:pillai_hackcelestial/widgets/event_card.dart';
 import 'package:pillai_hackcelestial/widgets/popular_card.dart';
 
@@ -15,13 +17,37 @@ class EventScreen extends StatefulWidget {
 
 class _EventScreenState extends State<EventScreen> {
   int _selectedTabIndex = 0; // 0 for Explore, 1 for My Events
+  List<Event> events = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchEvents();
+  }
+
+  Future<void> fetchEvents() async {
+    try {
+      List<Event> fetchedEvents = await EventServices.fetchOngoingEvents();
+      setState(() {
+        events = fetchedEvents;
+        isLoading = false;
+      });
+      print(" asdfasdfasdf    " +  fetchedEvents.toString());
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget header() {
       return Container(
         margin: const EdgeInsets.only(
-          top: 24,
+          top: 4,
           left: 24,
           right: 24,
         ),
@@ -31,27 +57,24 @@ class _EventScreenState extends State<EventScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          print("notification page");
-                        },
-                        child: Icon(
-                          Icons.notifications_active,
-                          size: 50,
-                        ),
-                      ),
-                      SizedBox(width: 20), 
-                      Icon(
-                        Icons.add,
-                        size: 40,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 2,
-                  ),
+                  //  Row(
+                  //   children: [
+                  //     GestureDetector(
+                  //       onTap: (){
+                  //         print("notification page");
+                  //       },
+                  //       child: Icon(
+                  //         Icons.notifications_active,
+                  //         size: 50,
+                  //       ),
+                  //     ),
+                  //     SizedBox(width: 20),
+                  //     Icon(
+                  //       Icons.add,
+                  //       size: 40,
+                  //     ),
+                  //   ],
+                  // ),
                   Text(
                     'Events',
                     style: GoogleFonts.agdasima(
@@ -95,14 +118,17 @@ class _EventScreenState extends State<EventScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: _selectedTabIndex == 0 ? MyColors.ourPrimary : Colors.grey[300],
+                    color: _selectedTabIndex == 0
+                        ? MyColors.ourPrimary
+                        : Colors.grey[300],
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     'Explore',
                     style: TextStyle(
                       fontSize: 16,
-                      color: _selectedTabIndex == 0 ? Colors.white : Colors.black,
+                      color:
+                          _selectedTabIndex == 0 ? Colors.white : Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -122,14 +148,17 @@ class _EventScreenState extends State<EventScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: _selectedTabIndex == 1 ? MyColors.ourPrimary : Colors.grey[300],
+                    color: _selectedTabIndex == 1
+                        ? MyColors.ourPrimary
+                        : Colors.grey[300],
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     'My Events',
                     style: TextStyle(
                       fontSize: 16,
-                      color: _selectedTabIndex == 1 ? Colors.white : Colors.black,
+                      color:
+                          _selectedTabIndex == 1 ? Colors.white : Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -260,7 +289,8 @@ class _EventScreenState extends State<EventScreen> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                    children: populars.map((item) => PopularCard(item)).toList()),
+                    children:
+                        populars.map((item) => PopularCard(item)).toList()),
               ),
             )
           ],
@@ -307,7 +337,8 @@ class _EventScreenState extends State<EventScreen> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                    children: populars.map((item) => PopularCard(item)).toList()),
+                    children:
+                        populars.map((item) => PopularCard(item)).toList()),
               ),
             )
           ],
@@ -315,7 +346,7 @@ class _EventScreenState extends State<EventScreen> {
       );
     }
 
-    Widget CompletedEvents(){
+    Widget CompletedEvents() {
       return Container(
         margin: const EdgeInsets.only(
           top: 24,
@@ -339,17 +370,25 @@ class _EventScreenState extends State<EventScreen> {
             const SizedBox(
               height: 13,
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-              ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: events.map((item) => EventCard(item)).toList(),
-                ),
-              ),
-            )
+                      isLoading
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 24),
+                  child: CircularProgressIndicator(), 
+                )
+              : events.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: Text('No events available', style: TextStyle(fontSize: 16)),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 24),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: events.map((item) => EventCard(item)).toList(),
+                        ),
+                      ),
+                    )
           ],
         ),
       );
@@ -372,11 +411,8 @@ class _EventScreenState extends State<EventScreen> {
                     ],
                   )
                 : Column(
-                  children: [
-                    EnroledEvents(),
-                    CompletedEvents()
-                  ],
-                ),
+                    children: [EnroledEvents(), CompletedEvents()],
+                  ),
           ],
         ),
       ),

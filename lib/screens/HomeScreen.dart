@@ -70,6 +70,7 @@ class _HomeScreen extends ConsumerState<Homescreen>
       UserDashboardPage()
     ];
     return Scaffold(
+      backgroundColor: MyColors.ourBackground,
       drawer: Drawer(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,6 +178,7 @@ class _HomeScreen extends ConsumerState<Homescreen>
         ),
       ),
       appBar: AppBar(
+        backgroundColor: MyColors.ourBackground,
         actions: [
           InkWell(
             onTap: () {},
@@ -190,11 +192,12 @@ class _HomeScreen extends ConsumerState<Homescreen>
           ),
           InkWell(
             onTap: () {
-              mySocketConnect.socket.emit("reciveMessage", {
-                "userId": "66e6926336455070e72e4bcb",
-                "roomId": "room1",
-                "content": "ddd"
-              });
+              GoRouter.of(context).pushNamed(StudentsRoutes.studentProfilePage);
+              // mySocketConnect.socket.emit("reciveMessage", {
+              //   "userId": "66e6926336455070e72e4bcb",
+              //   "roomId": "room1",
+              //   "content": "ddd"
+              // });
             },
             child: SizedBox(
               height: 35,
@@ -266,14 +269,23 @@ class _HomeScreen extends ConsumerState<Homescreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           UserProfileHomePage(),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-            child: Text(
-              "Let's Build some Connections",
-              style: GoogleFonts.abyssinicaSil(fontSize: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Let's Build some Connections",
+                  style: GoogleFonts.abyssinicaSil(fontSize: 20),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 10.0),
+                  child: Text("View More", style: TextStyle(color: MyColors.ourPrimary),),
+                )
+              ],
             ),
           ),
           GetFalcultyList(),
@@ -282,11 +294,20 @@ class _HomeScreen extends ConsumerState<Homescreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Let’s Catch up",
-                    style: GoogleFonts.abyssinicaSil(
-                      fontSize: 16,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Let’s Catch up",
+                        style: GoogleFonts.abyssinicaSil(
+                          fontSize: 20,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0),
+                        child: Text("View More", style: TextStyle(color: MyColors.ourPrimary),),
+                      )
+                    ],
                   ),
                   SizedBox(
                     height: 10,
