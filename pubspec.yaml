@@ -52,6 +52,7 @@ dependencies:
   hive_flutter: ^1.1.0
   dotted_separator: ^1.0.6
   syncfusion_flutter_barcodes: ^27.1.48
+  rive: ^0.13.13
 
 dev_dependencies:
   hive_generator: ^1.1.0

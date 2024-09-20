@@ -23,6 +23,8 @@ class _GetFalcultyListProvider extends ConsumerState<GetFalcultyList> {
   }
 
   Widget build(context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     var data = ref.watch(FacultyListProvider);
     return data == null
         ? CircularProgressIndicator()
@@ -31,18 +33,15 @@ class _GetFalcultyListProvider extends ConsumerState<GetFalcultyList> {
                 child: Text("Empty"),
               )
             : Container(
-                height: 200,
-                child: Card(
-                  elevation: 10,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data!.length,
-                      itemBuilder: (BuildContext contex, int index) {
-                        return MentorCards(
-                          data: data[index],
-                        );
-                      }),
-                ),
+                height: screenWidth * 0.5,
+                child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: data!.length,
+                    itemBuilder: (BuildContext contex, int index) {
+                      return MentorCards(
+                        data: data[index],
+                      );
+                    }),
               );
   }
 }

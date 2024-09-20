@@ -3,10 +3,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/Socket/init.dart';
+import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/components/menu.dart';
+import 'package:pillai_hackcelestial/components/rive_assets.dart';
+import 'package:pillai_hackcelestial/components/rive_utils.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:pillai_hackcelestial/screens/Students/dashboard_page.dart';
+import 'package:pillai_hackcelestial/screens/Students/events_screen.dart';
+import 'package:pillai_hackcelestial/screens/Students/mentorship_page.dart';
+import 'package:pillai_hackcelestial/screens/Students/search_page.dart';
 import 'package:pillai_hackcelestial/widgets/EventsCrad.dart';
 import 'package:pillai_hackcelestial/widgets/StudentCard.dart';
 import 'package:pillai_hackcelestial/widgets/UserProfileHomePage.dart';
+import 'package:pillai_hackcelestial/widgets/btm_nav_item.dart';
 import 'package:pillai_hackcelestial/widgets/getCommuityListPorvider.dart';
 import 'package:pillai_hackcelestial/widgets/getFaclutyListProvider.dart';
 import 'package:pillai_hackcelestial/widgets/mentorCards.dart';
@@ -20,8 +29,46 @@ class Homescreen extends ConsumerStatefulWidget {
   }
 }
 
-class _HomeScreen extends ConsumerState<Homescreen> {
+class _HomeScreen extends ConsumerState<Homescreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> scalAnimation;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 100))
+          ..addListener(() {
+            setState(() {});
+          });
+    animation = Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
+        parent: _animationController, curve: Curves.fastOutSlowIn));
+    scalAnimation = Tween<double>(begin: 1, end: 0.8).animate(CurvedAnimation(
+        parent: _animationController, curve: Curves.fastOutSlowIn));
+    super.initState();
+    // getUserDetails();+
+  }
+
+  Menu selectedBottonNav = bottomNavItems[0];
+  int page = 0;
+
+  void updateSelectedBtmNav(Menu menu) {
+    if (selectedBottonNav != menu) {
+      setState(() {
+        selectedBottonNav = menu;
+      });
+    }
+  }
+
   Widget build(context) {
+    List<Widget> pages = [
+      Dashboard(),
+      MentorshipPage(),
+      SearchPage(),
+      EventScreen(),
+      UserDashboardPage()
+    ];
     return Scaffold(
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.mic),
@@ -184,50 +231,102 @@ class _HomeScreen extends ConsumerState<Homescreen> {
           )
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            UserProfileHomePage(),
-            SizedBox(
-              height: 20,
+      body: pages[page],
+      bottomNavigationBar: Transform.translate(
+        offset: Offset(0, 100 * animation.value),
+        child: SafeArea(
+          child: Container(
+            padding:
+                const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 12),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            decoration: BoxDecoration(
+              color: MyColors.ourPrimary.withOpacity(0.8),
+              borderRadius: const BorderRadius.all(Radius.circular(24)),
+              boxShadow: [
+                BoxShadow(
+                  color: MyColors.backgroundColor2.withOpacity(0.3),
+                  offset: const Offset(0, 20),
+                  blurRadius: 20,
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-              child: Text(
-                "Let's Build some Connections",
-                style: GoogleFonts.abyssinicaSil(fontSize: 16),
-              ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ...List.generate(
+                  bottomNavs.length,
+                  (index) {
+                    Menu navBar = bottomNavItems[index];
+                    return BtmNavItem(
+                      navBar: navBar,
+                      press: () {
+                        print('index: ' + index.toString());
+                        RiveUtils.chnageSMIBoolState(navBar.rive.status!);
+                        updateSelectedBtmNav(navBar);
+                        setState(() {
+                          page = index;
+                        });
+                      },
+                      riveOnInit: (artboard) {
+                        navBar.rive.status = RiveUtils.getRiveInput(artboard,
+                            stateMachineName: navBar.rive.stateMachineName);
+                      },
+                      selectedNav: selectedBottonNav,
+                    );
+                  },
+                ),
+              ],
             ),
-            GetFalcultyList(),
-            Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Let’s Catch up",
-                      style: GoogleFonts.abyssinicaSil(
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      height: 302,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext con, int index) {
-                            return StudentCard();
-                          }),
-                    ),
-                  ],
-                )),
-            CommunityList()
-          ],
+          ),
         ),
+      ),
+    );
+  }
+
+  SingleChildScrollView Dashboard() {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          UserProfileHomePage(),
+          SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+            child: Text(
+              "Let's Build some Connections",
+              style: GoogleFonts.abyssinicaSil(fontSize: 16),
+            ),
+          ),
+          GetFalcultyList(),
+          Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Let’s Catch up",
+                    style: GoogleFonts.abyssinicaSil(
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 302,
+                    child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext con, int index) {
+                          return StudentCard();
+                        }),
+                  ),
+                ],
+              )),
+          // CommunityList()
+        ],
       ),
     );
   }

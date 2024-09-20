@@ -7,13 +7,15 @@ class MentorCards extends ConsumerWidget {
   Faculty data;
   MentorCards({required this.data});
   Widget build(contex, ref) {
+    // final screenWidth = MediaQuery.of(context).size.width;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: 300,
+        width: 320,
         decoration: BoxDecoration(
-          // border: Border.all(color: Colors.black),
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          border: Border.all(width: 0.5),
+          borderRadius: BorderRadius.all(Radius.circular(15)),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -25,11 +27,12 @@ class MentorCards extends ConsumerWidget {
                 child: Container(
                   height: 100,
                   width: 100,
+                  
                   decoration: BoxDecoration(
+                    color: Colors.amber,
                       image: DecorationImage(
                           fit: BoxFit.cover,
                           image: NetworkImage(data.imageUrl!)),
-                      // color: Colors.amber,
                       borderRadius: BorderRadius.all(Radius.circular(15))),
                 ),
               ),
