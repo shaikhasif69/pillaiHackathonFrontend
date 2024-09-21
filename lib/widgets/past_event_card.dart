@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pillai_hackcelestial/model/event_model.dart';
+import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
+import 'package:pillai_hackcelestial/model/upComingEventModel.dart';
 import 'package:pillai_hackcelestial/models/popular_model.dart';
 
-class PopularCard extends StatelessWidget {
-  final PopularModel popular;
+class PastEventCard extends StatelessWidget {
+  final UpcomingEvent event;
 
-  const PopularCard(
-    this.popular, {
+  const PastEventCard(
+    this.event, {
     Key? key,
   }) : super(key: key);
 
@@ -31,7 +34,7 @@ class PopularCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(popular.imageUrl!),
+                    image: event.imageUrl == null || event.imageUrl == "" ? AssetImage("images/facebook.png") : NetworkImage(event.imageUrl!),
                   ),
                 ),
               ),
@@ -48,7 +51,7 @@ class PopularCard extends StatelessWidget {
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      popular.isTicket!,
+                      event.creator.username!,
                       // style: orangeTextStyle.copyWith(
                       //   fontWeight: medium,
                       // ),
@@ -62,7 +65,7 @@ class PopularCard extends StatelessWidget {
             height: 10,
           ),
           Text(
-            popular.name!,
+            event.title!,
             // style: primaryTextStyle.copyWith(
             //   fontSize: 16,
             //   fontWeight: semiBold,
@@ -72,7 +75,7 @@ class PopularCard extends StatelessWidget {
             height: 2,
           ),
           Text(
-            '${popular.date!} • ${popular.time!}',
+             event.date == null || event.date == "" ? " " :  '${event.date!} • ${event.time!}',
             // style: secondaryTextStyle.copyWith(
             //   fontSize: 12,
             // ),

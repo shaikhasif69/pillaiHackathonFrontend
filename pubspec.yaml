@@ -53,6 +53,7 @@ dependencies:
   dotted_separator: ^1.0.6
   syncfusion_flutter_barcodes: ^27.1.48
   rive: ^0.13.13
+  flutter_chat_ui: ^1.6.15
 
 dev_dependencies:
   hive_generator: ^1.1.0

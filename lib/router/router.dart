@@ -13,6 +13,8 @@ import 'package:pillai_hackcelestial/screens/Communities/MycreatedCommunity.dart
 import 'package:pillai_hackcelestial/screens/Event/createEvent.dart';
 import 'package:pillai_hackcelestial/screens/HomeScreen.dart';
 import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
+import 'package:pillai_hackcelestial/screens/Staffs/faculty_home_page.dart';
+import 'package:pillai_hackcelestial/screens/Staffs/staff_profile_page.dart';
 import 'package:pillai_hackcelestial/screens/StudentFourm/studentFourm.dart';
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page3.dart';
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page4.dart';
@@ -243,10 +245,20 @@ class MyGoRouter {
       },
     ),
 
-        //    GoRoute(
-        //   path: FacultyRoutes.facultyHomePage,
-        //   name: FacultyRoutes.facultyHomePage,
-        //   // builder: (context, state) => facultyHomePage(),
-        // ),
+    // faculty routes
+
+           GoRoute(
+          path: FacultyRoutes.facultyHomePage,
+          name: FacultyRoutes.facultyHomePage,
+          builder: (context, state) => facultyHomePage(),
+        ),
+
+         GoRoute(
+          path: FacultyRoutes.facultyProfilePage,
+          name: FacultyRoutes.facultyProfilePage,
+          builder: (context, state) => StaffProfilePage(),
+        ),
   ]);
+
+  
 }

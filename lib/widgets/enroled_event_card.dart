@@ -1,13 +1,14 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:pillai_hackcelestial/model/enroledEventModel.dart';
 import 'package:pillai_hackcelestial/model/event_model.dart';
 import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
-class EventCard extends StatelessWidget {
-  final OnGoingEventModel event;
-  const EventCard(
+class EnroledEventCard extends StatelessWidget {
+  final EnrolledEventModel event;
+  const EnroledEventCard(
     this.event, {
     Key? key,
   }) : super(key: key);
@@ -93,7 +94,7 @@ class EventCard extends StatelessWidget {
               const SizedBox(
                 width: 4,
               ),
-              Text(event.location.toString()
+              Text(event.description.toString()
                   // event.location!,
                   // style: greyTextStyle,
                   ),

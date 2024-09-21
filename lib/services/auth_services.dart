@@ -70,12 +70,13 @@ class AuthService {
     if (response.statusCode == 201) {
       print("got and succesfful?");
       final body = jsonDecode(response.body);
+      print("body of user : $body");
       final user = body['user'];
       final userId = body['user']['_id'];
       final token = body['token'];
 
       // Save token to SharedPreferences
-      ;
+      
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('authToken', token);
@@ -98,18 +99,21 @@ class AuthService {
           ),
         );
       } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('facultAuthToken', token);
+      await prefs.setString("_fid", userId);
         var facultyBox = await Hive.openBox<Faculty>('facultyBox');
         facultyBox.put(
           'faculty',
           Faculty(
             id: user['_id'],
             username: user['username'],
-            name: user['name'],
+            name: "",
             email: user['email'],
-            department: user['department'],
-            subjects: List<String>.from(user['subjects']),
-            experience: user['experience'],
-            gender: user['gender'],
+            department: "",
+            subjects: [],
+            experience: 1,
+            gender: "",
           ),
         );
       }
