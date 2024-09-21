@@ -6,6 +6,7 @@ import 'package:pillai_hackcelestial/models/faculty.dart';
 import 'package:pillai_hackcelestial/models/student.dart';
 import 'package:pillai_hackcelestial/router/router.dart';
 import 'package:pillai_hackcelestial/screens/splash_screen.dart';
+import 'package:pillai_hackcelestial/services/faculty_services.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -22,13 +23,26 @@ void main() async {
   runApp(ProviderScope(child: MyApp())); // Wrap MyApp with ProviderScope
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    FacultyServices.getUserData();
+    
+  }
 
   @override
   final MyGoRouter myGoRouter = MyGoRouter();
 
   Widget build(BuildContext context) {
+    
     return ResponsiveSizer(
       builder: (context, orientation, screenType) {
         return MaterialApp.router(

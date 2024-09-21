@@ -164,12 +164,12 @@ class _ChattingPage extends ConsumerState<ChatBot> {
                             msg.text = "";
                             ref.read(chatBotProvider.notifier).isLoading = true;
                           });
-                          var res = await StudentServices.getChatBot(s, ref);
-                          ref.read(chatBotProvider.notifier).isLoading = false;
-                          ref
-                              .read(chatBotProvider.notifier)
-                              .data
-                              .add({"msg": res, "user": "sender"});
+                          // var res = await StudentServices.getChatBot(s, ref);
+                          // ref.read(chatBotProvider.notifier).isLoading = false;
+                          // ref
+                          //     .read(chatBotProvider.notifier)
+                          //     .data
+                          //     .add({"msg": res, "user": "sender"});
                         }
                       },
                       icon: Icon(Icons.send))

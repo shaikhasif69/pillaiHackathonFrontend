@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/services/faculty_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class StaffProfilePage extends StatefulWidget {
   const StaffProfilePage({Key? key}) : super(key: key);
@@ -13,26 +15,31 @@ class StaffProfilePage extends StatefulWidget {
 
 class _DoctorProfilePageState extends State<StaffProfilePage> {
   late String userName = "";
+  late String email = "";
+  late String imageUrl = "";
+  late String department = "";
+  late String experience = "";
 
   @override
   void initState() {
     super.initState();
-    // getUserDetails();
+    _loadUserProfile();
   }
 
-  // Future<void> getUserDetails() async {
-  //   final hiveService = HiveService();
-  //   DoctorHive? doctor = await hiveService.getDoctor();
+  Future<void> _loadUserProfile() async {
+    print("////");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  //   if (doctor != null) {
-  //     print('doctor ID: ${doctor.id}');
-  //     print('doctor Name: ${doctor.firstName} ${doctor.lastName}');
-  //     setState(() {
-  //       userName = '${doctor.firstName} ${doctor.lastName}';
-  //     });
-  //     // Use the user data as needed
-  //   }
-  // }
+    setState(() {
+      userName = prefs.getString('Faculty_username') ?? 'John Doe';
+
+      email = prefs.getString('Faculty_email') ?? 'john.doe@example.com';
+      imageUrl = prefs.getString('Faculty_image') ?? 'assets/img_event_1.png';
+      department = prefs.getString("Faculty_department") ?? "EXTC Department";
+      experience = prefs.getString("Faculty_experience") ?? "50";
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,14 +63,12 @@ class _DoctorProfilePageState extends State<StaffProfilePage> {
         children: [
           // COLUMN THAT WILL CONTAIN THE PROFILE
           Column(
-            children:  [
-              const CircleAvatar(
+            children: [
+              CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage(
-                  "lib/icons/theSergeon.jpg",
-                ),
+                backgroundImage: NetworkImage(imageUrl),
               ),
-             const SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 userName,
                 style: const TextStyle(
@@ -71,90 +76,39 @@ class _DoctorProfilePageState extends State<StaffProfilePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text("Senior Surgeon")
+              Text(department)
             ],
           ),
           const SizedBox(height: 25),
+
           Row(
-            children: const [
-              Padding(
-                padding: EdgeInsets.only(right: 5),
-                child: Text(
-                  "Complete your profile",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               Text(
-                "(1/5)",
-                style: TextStyle(
-                  color: Colors.blue,
-                ),
+                "Email",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Text(email),
               )
             ],
           ),
-          const SizedBox(height: 10),
-          Row(
-            children: List.generate(5, (index) {
-              return Expanded(
-                child: Container(
-                  height: 7,
-                  margin: EdgeInsets.only(right: index == 4 ? 0 : 6),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: index == 0 ? Colors.blue : Colors.black12,
-                  ),
-                ),
-              );
-            }),
-          ),
-          const SizedBox(height: 10),
           SizedBox(
-            height: 180,
-            child: ListView.separated(
-              physics: const BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final card = profileCompletionCards[index];
-                return SizedBox(
-                  width: 160,
-                  child: Card(
-                    shadowColor: Colors.black12,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        children: [
-                          Icon(
-                            card.icon,
-                            size: 30,
-                          ),
-                          const SizedBox(height: 10),
-                          Text(
-                            card.title,
-                            textAlign: TextAlign.center,
-                          ),
-                          const Spacer(),
-                          ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                            ),
-                            child: Text(card.buttonText),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) =>
-                  const Padding(padding: EdgeInsets.only(right: 5)),
-              itemCount: profileCompletionCards.length,
-            ),
+            height: 20,
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("Experience",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
+              Padding(
+                padding: const EdgeInsets.only(right: 20.0),
+                child: Text(experience),
+              )
+            ],
+          ),
+
           const SizedBox(height: 35),
           ...List.generate(
             customListTiles.length,
@@ -180,35 +134,6 @@ class _DoctorProfilePageState extends State<StaffProfilePage> {
   }
 }
 
-class ProfileCompletionCard {
-  final String title;
-  final String buttonText;
-  final IconData icon;
-  ProfileCompletionCard({
-    required this.title,
-    required this.buttonText,
-    required this.icon,
-  });
-}
-
-List<ProfileCompletionCard> profileCompletionCards = [
-  ProfileCompletionCard(
-    title: "Set Your Profile Details",
-    icon: CupertinoIcons.person_circle,
-    buttonText: "Continue",
-  ),
-  ProfileCompletionCard(
-    title: "Upload your Documents",
-    icon: CupertinoIcons.doc,
-    buttonText: "Upload",
-  ),
-  ProfileCompletionCard(
-    title: "Add your Expertise",
-    icon: CupertinoIcons.square_list,
-    buttonText: "Add",
-  ),
-];
-
 class CustomListTile {
   final IconData icon;
   final String title;
@@ -224,7 +149,7 @@ List<CustomListTile> customListTiles = [
     title: "Activity",
   ),
   CustomListTile(
-    title: "Notifications",
+    title: "Committies",
     icon: CupertinoIcons.bell,
   ),
   CustomListTile(

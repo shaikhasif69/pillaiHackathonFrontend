@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/model/community.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pillai_hackcelestial/model/faculty_committe.dart';
 import 'package:pillai_hackcelestial/screens/Staffs/staff_profile_page.dart';
-import 'package:pillai_hackcelestial/screens/Students/search_page.dart';
+import 'package:pillai_hackcelestial/screens/Students/my_communities.dart';
 import 'package:pillai_hackcelestial/services/community_services.dart';
 
 class facultyHomePage extends StatefulWidget {
@@ -29,7 +30,7 @@ class _facultyHomePageState extends State<facultyHomePage> {
   void initState() {
     super.initState();
     futureCommunities =
-        CommunityServices.fetchCommunities(); // Fetch communities on init
+        CommunityServices.fetchCommunities(); 
   }
 
   @override
@@ -38,9 +39,7 @@ class _facultyHomePageState extends State<facultyHomePage> {
 
     List<Widget> pages = [
       facultyDashboard(screenHeight),
-      // MentorshipPage(),
-      SearchPage(),
-      // EventScreen(),
+      MyCommunities(),
       StaffProfilePage()
     ];
 
@@ -160,69 +159,82 @@ class _facultyHomePageState extends State<facultyHomePage> {
               Padding(
                 padding: const EdgeInsets.only(right: 20.0),
                 child: GestureDetector(
-                  onTap: (){},
-                  child: Text("More", style: TextStyle(fontWeight: FontWeight.w600),)),
+                    onTap: () {},
+                    child: Text(
+                      "More",
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    )),
               )
             ],
           ),
         ),
-        Container(
-          height: screenHeight * 0.42,
-          child: FutureBuilder<List<Communites>>(
-            future: futureCommunities,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    final community = snapshot.data![index];
-                    return ListTile(
-                        leading: Image.network(community.imageUrl.toString(),
-                            width: 50, height: 50),
-                        title: Text(community.name.toString()),
-                        subtitle: Text(community.description.toString()),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize
-                              .min, 
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.check,
-                                  color: Colors.green), // Yes tick icon
-                              onPressed: () {
-                                CommunityServices.updateCommunityStatus(
-                                  community.id.toString(),
-                                  'approved',
-                                );
-                              },
-                            ),
-                            IconButton(
-                              icon: Icon(Icons.cancel, color: Colors.red),
-                              onPressed: () {
-                                CommunityServices.updateCommunityStatus(
-                                    community.id.toString(), 'rejected');
-                              },
-                            ),
-                          ],
-                        ));
-                  },
-                );
-              } else if (snapshot.hasError) {
-                // print(snapshot.)
-                print("look down");
-                print(snapshot.error);
-                return Center(child: Text('Failed to load communities'));
-              }
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            height: screenHeight * 0.6,
+            child: FutureBuilder<List<Communites>>(
+              future: futureCommunities,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      final community = snapshot.data![index];
+                      return Column(
+                        children: [
+                       
+                          Card(
+                            child: ListTile(
+                                leading: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(image: community.imageUrl == null || community.imageUrl == ""? AssetImage("assets/images/image (1).png") : NetworkImage(community.imageUrl.toString())),
+                                    shape: BoxShape.circle
+                                  ),
+                                ),
+                                title: Text(community.name.toString()),
+                                subtitle: Text(community.description.toString()),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.check,
+                                          color: Colors.green), // Yes tick icon
+                                      onPressed: () {
+                                        CommunityServices.updateCommunityStatus(
+                                          community.id.toString(),
+                                          'approved',
+                                        );
+                                      },
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.cancel, color: Colors.red),
+                                      onPressed: () {
+                                        CommunityServices.updateCommunityStatus(
+                                            community.id.toString(), 'rejected');
+                                      },
+                                    ),
+                                  ],
+                                )),
+                          ),
+                              Divider(),
+                        ],
+                      );
+                    },
+                  );
+                } else if (snapshot.hasError) {
+                  // print(snapshot.)
+                  print("look down");
+                  print(snapshot.error);
+                  return Center(child: Text('Failed to load communities'));
+                }
 
-              return Center(child: CircularProgressIndicator());
-            },
+                return Center(child: CircularProgressIndicator());
+              },
+            ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0),
-          child: Text("Your Community", style: TextStyle(
-            fontSize: 16
-          ),),
-        )
       ],
     );
   }
