@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 
 class EventDescPage2 extends StatefulWidget {
-  const EventDescPage2({super.key});
+  final OnGoingEventModel d;
+  const EventDescPage2({required this.d, super.key});
 
   @override
   State<EventDescPage2> createState() => _EventDescPage2State();
@@ -88,7 +90,7 @@ class _EventDescPage2State extends State<EventDescPage2> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Chess Tale",
+                                      widget.d.title,
                                       style: GoogleFonts.agdasima(
                                         fontSize: 38,
                                         fontWeight: FontWeight.w600,
@@ -109,8 +111,10 @@ class _EventDescPage2State extends State<EventDescPage2> {
                                   borderRadius: BorderRadius.circular(20),
                                   child: SizedBox.fromSize(
                                     size: Size.fromRadius(90),
-                                    child: Image.asset('assets/img_event_1.png',
-                                        fit: BoxFit.cover),
+                                    child: widget.d.title == ""
+                                        ? Image.asset('assets/img_event_1.png',
+                                            fit: BoxFit.cover)
+                                        : Image.network(widget.d.imageUrl),
                                   ),
                                 ),
                               ],
@@ -159,8 +163,9 @@ class _EventDescPage2State extends State<EventDescPage2> {
                         Row(
                           children: [
                             Radio(
+                              toggleable: true,
                               value: 'UPI',
-                              groupValue: 'paymentMethod',
+                              groupValue: 'UPI',
                               onChanged: (value) {
                                 setState(() {
                                   print("something will happen if UPI");
@@ -245,7 +250,8 @@ class _EventDescPage2State extends State<EventDescPage2> {
               child: ElevatedButton(
                 onPressed: () {
                   if (5 == 5) {
-                    GoRouter.of(context).pushNamed(StudentsRoutes.eventPage3);
+                    GoRouter.of(context)
+                        .pushNamed(StudentsRoutes.eventPage4, extra: widget.d);
                   }
                   // Add continue button functionality
                 },

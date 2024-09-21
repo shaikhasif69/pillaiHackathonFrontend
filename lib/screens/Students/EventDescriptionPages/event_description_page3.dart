@@ -3,10 +3,13 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/model/event_model.dart';
+import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 
 class EventDescPage3 extends StatefulWidget {
-  const EventDescPage3({super.key});
+  final OnGoingEventModel data;
+  const EventDescPage3({required this.data, super.key});
 
   @override
   State<EventDescPage3> createState() => _EventDescPage3State();
@@ -89,7 +92,7 @@ class _EventDescPage3State extends State<EventDescPage3> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Chess Tale",
+                                      widget.data.title,
                                       style: GoogleFonts.agdasima(
                                         fontSize: 38,
                                         fontWeight: FontWeight.w600,
@@ -110,8 +113,10 @@ class _EventDescPage3State extends State<EventDescPage3> {
                                   borderRadius: BorderRadius.circular(20),
                                   child: SizedBox.fromSize(
                                     size: Size.fromRadius(90),
-                                    child: Image.asset('assets/img_event_1.png',
-                                        fit: BoxFit.cover),
+                                    child: widget.data.imageUrl == ""
+                                        ? Image.asset('assets/img_event_1.png',
+                                            fit: BoxFit.cover)
+                                        : Image.network(widget.data.imageUrl),
                                   ),
                                 ),
                               ],
@@ -165,7 +170,8 @@ class _EventDescPage3State extends State<EventDescPage3> {
               child: ElevatedButton(
                 onPressed: () {
                   if (5 == 5) {
-                    GoRouter.of(context).pushNamed(StudentsRoutes.eventPage4);
+                    GoRouter.of(context).pushNamed(StudentsRoutes.eventPage5,
+                        extra: widget.data);
                     // GoRouter.of(context).pushNamed(name)
                   }
                   // Add continue button functionality

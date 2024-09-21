@@ -1,4 +1,6 @@
 import 'package:pillai_hackcelestial/model/community.dart';
+import 'package:pillai_hackcelestial/model/event_model.dart';
+import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
 import 'package:pillai_hackcelestial/models/UserChatList.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/screens/Chatin/ChatBot.dart';
@@ -16,6 +18,8 @@ import 'package:pillai_hackcelestial/screens/On_Board/on_boarding.dart';
 import 'package:pillai_hackcelestial/screens/Staffs/faculty_home_page.dart';
 import 'package:pillai_hackcelestial/screens/Staffs/staff_profile_page.dart';
 import 'package:pillai_hackcelestial/screens/StudentFourm/studentFourm.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_desciption_page2.dart';
+import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page1.dart';
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page3.dart';
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page4.dart';
 import 'package:pillai_hackcelestial/screens/Students/events_screen.dart';
@@ -58,6 +62,16 @@ class MyGoRouter {
       name: StudentsRoutes.createCommunity,
       builder: (context, state) {
         return CreateCommunity();
+      },
+    ),
+    GoRoute(
+      path: StudentsRoutes.eventPage2,
+      name: StudentsRoutes.eventPage2,
+      builder: (context, state) {
+        OnGoingEventModel d = state.extra as OnGoingEventModel;
+        return EventDescPage1(
+          data: d,
+        );
       },
     ),
     GoRoute(
@@ -189,20 +203,40 @@ class MyGoRouter {
       name: StudentsRoutes.studentProfilePage,
       builder: (context, state) => ProfileScreen(),
     ),
-           GoRoute(
-          path: StudentsRoutes.eventPage1,
-          name: StudentsRoutes.eventPage1,
-          builder: (context, state) => EventScreen(),
-        ),
+    GoRoute(
+      path: StudentsRoutes.eventPage1,
+      name: StudentsRoutes.eventPage1,
+      builder: (context, state) => EventScreen(),
+    ),
     GoRoute(
       path: StudentsRoutes.eventPage3,
       name: StudentsRoutes.eventPage3,
-      builder: (context, state) => EventDescPage3(),
+      builder: (context, state) {
+        OnGoingEventModel d = state.extra as OnGoingEventModel;
+        return EventDescPage2(
+          d: d,
+        );
+      },
     ),
     GoRoute(
       path: StudentsRoutes.eventPage4,
       name: StudentsRoutes.eventPage4,
-      builder: (context, state) => EventDescPage4(),
+      builder: (context, state) {
+        OnGoingEventModel d = state.extra as OnGoingEventModel;
+        return EventDescPage3(
+          data: d,
+        );
+      },
+    ),
+    GoRoute(
+      path: StudentsRoutes.eventPage5,
+      name: StudentsRoutes.eventPage5,
+      builder: (context, state) {
+        OnGoingEventModel d = state.extra as OnGoingEventModel;
+        return EventDescPage4(
+          d: d,
+        );
+      },
     ),
     GoRoute(
       path: StudentsRoutes.chattingList,
@@ -246,18 +280,16 @@ class MyGoRouter {
 
     // faculty routes
 
-           GoRoute(
-          path: FacultyRoutes.facultyHomePage,
-          name: FacultyRoutes.facultyHomePage,
-          builder: (context, state) => facultyHomePage(),
-        ),
+    GoRoute(
+      path: FacultyRoutes.facultyHomePage,
+      name: FacultyRoutes.facultyHomePage,
+      builder: (context, state) => facultyHomePage(),
+    ),
 
-         GoRoute(
-          path: FacultyRoutes.facultyProfilePage,
-          name: FacultyRoutes.facultyProfilePage,
-          builder: (context, state) => StaffProfilePage(),
-        ),
+    GoRoute(
+      path: FacultyRoutes.facultyProfilePage,
+      name: FacultyRoutes.facultyProfilePage,
+      builder: (context, state) => StaffProfilePage(),
+    ),
   ]);
-
-  
 }

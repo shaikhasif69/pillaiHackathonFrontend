@@ -56,6 +56,7 @@ dependencies:
   flutter_chat_ui: ^1.6.15
   animated_bottom_navigation_bar: ^1.3.3
   font_awesome_flutter: ^10.7.0
+  flutter_tts: ^4.0.2
 
 dev_dependencies:
   hive_generator: ^1.1.0

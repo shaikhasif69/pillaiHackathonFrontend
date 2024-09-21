@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:pillai_hackcelestial/Services/student.dart';
 import 'package:pillai_hackcelestial/Socket/init.dart';
@@ -29,8 +30,13 @@ class _ChattingPage extends ConsumerState<ChatBot> {
     setState(() {});
   }
 
+  // FlutterTts flutterTts = FlutterTts();
   @override
   void initState() {
+    // flutterTts.setLanguage("en-US");
+    // flutterTts.setSpeechRate(0.5);
+    // flutterTts.setPitch(1.5);
+    // flutterTts.setVoice("en-us-x-sfg#male_1-local");
     mySocketConnect.getChatinit(ref);
     ref.read(chatBotProvider.notifier).setState = updated;
     ref.read(chatBotProvider.notifier).isLoading = true;
@@ -155,6 +161,7 @@ class _ChattingPage extends ConsumerState<ChatBot> {
                       onPressed: () async {
                         if (msg.text != "") {
                           String s = "";
+                          // flutterTts.stop();
                           setState(() {
                             ref
                                 .read(chatBotProvider.notifier)
@@ -164,12 +171,13 @@ class _ChattingPage extends ConsumerState<ChatBot> {
                             msg.text = "";
                             ref.read(chatBotProvider.notifier).isLoading = true;
                           });
-                          // var res = await StudentServices.getChatBot(s, ref);
-                          // ref.read(chatBotProvider.notifier).isLoading = false;
-                          // ref
-                          //     .read(chatBotProvider.notifier)
-                          //     .data
-                          //     .add({"msg": res, "user": "sender"});
+                          var res = await StudentServices.getChatBot(s, ref);
+                          // flutterTts.speak(res);
+                          ref.read(chatBotProvider.notifier).isLoading = false;
+                          ref
+                              .read(chatBotProvider.notifier)
+                              .data
+                              .add({"msg": res, "user": "sender"});
                         }
                       },
                       icon: Icon(Icons.send))

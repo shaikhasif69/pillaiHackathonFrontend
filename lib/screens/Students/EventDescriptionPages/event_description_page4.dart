@@ -3,11 +3,14 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
+import 'package:pillai_hackcelestial/screens/Communities/MyCommunity.dart';
 import 'package:pillai_hackcelestial/widgets/seperatorLine.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 
 class EventDescPage4 extends StatefulWidget {
-  const EventDescPage4({super.key});
+  final OnGoingEventModel d;
+  const EventDescPage4({required this.d, super.key});
 
   @override
   State<EventDescPage4> createState() => _EventDescPage4State();
@@ -124,8 +127,10 @@ class _EventDescPage4State extends State<EventDescPage4> {
                       borderRadius: BorderRadius.circular(20),
                       child: SizedBox.fromSize(
                         size: Size.fromRadius(70),
-                        child: Image.asset('assets/img_event_1.png',
-                            fit: BoxFit.cover),
+                        child: widget.d.imageUrl == ""
+                            ? Image.asset('assets/img_event_1.png',
+                                fit: BoxFit.cover)
+                            : Image.network(widget.d.imageUrl),
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -133,7 +138,7 @@ class _EventDescPage4State extends State<EventDescPage4> {
                     Column(
                       children: [
                         Text(
-                          "Event Name",
+                          widget.d.title,
                           style: GoogleFonts.abyssinicaSil(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -159,7 +164,7 @@ class _EventDescPage4State extends State<EventDescPage4> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "The Name",
+                              widget.d.title,
                               style: GoogleFonts.abyssinicaSil(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -167,7 +172,7 @@ class _EventDescPage4State extends State<EventDescPage4> {
                               ),
                             ),
                             Text(
-                              "The Number",
+                              widget.d.id,
                               style: GoogleFonts.abyssinicaSil(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -187,7 +192,7 @@ class _EventDescPage4State extends State<EventDescPage4> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "The Name",
+                              datePrase(widget.d.date),
                               style: GoogleFonts.abyssinicaSil(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -195,7 +200,7 @@ class _EventDescPage4State extends State<EventDescPage4> {
                               ),
                             ),
                             Text(
-                              "The Number",
+                              widget.d.time,
                               style: GoogleFonts.abyssinicaSil(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -207,7 +212,7 @@ class _EventDescPage4State extends State<EventDescPage4> {
                       ],
                     ),
                     SizedBox(height: screenHeight * 0.05),
-                 
+
                     const MySeparator(color: Colors.grey),
 
                     SizedBox(height: screenHeight * 0.02),
