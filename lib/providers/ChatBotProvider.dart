@@ -9,12 +9,15 @@ import 'package:pillai_hackcelestial/screens/Chatin/chatList.dart';
 class chatBotProviderNotifier extends StateNotifier<List<String>?> {
   chatBotProviderNotifier() : super(null);
   bool isLoading = false;
+  late Function setState;
+
   List<Map<String, String>> data = [];
   getResponse() async {
     List<UserChatList>? data;
+  }
 
-    // data = await StudentServices.getUSerListForChat();
-    // state = data;
+  update() {
+    setState();
   }
 }
 
