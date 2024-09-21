@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
-import 'package:pillai_hackcelestial/model/Event.dart';
+import 'package:pillai_hackcelestial/model/enroledEventModel.dart';
+import 'package:pillai_hackcelestial/model/event_model.dart';
+import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
+import 'package:pillai_hackcelestial/model/upComingEventModel.dart';
 import 'package:pillai_hackcelestial/models/popular_model.dart';
 import 'package:pillai_hackcelestial/services/event_services.dart';
+import 'package:pillai_hackcelestial/widgets/enroled_event_card.dart';
 import 'package:pillai_hackcelestial/widgets/event_card.dart';
-import 'package:pillai_hackcelestial/widgets/popular_card.dart';
+import 'package:pillai_hackcelestial/widgets/past_event_card.dart';
+import 'package:pillai_hackcelestial/widgets/upcoming_event_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EventScreen extends StatefulWidget {
   const EventScreen({Key? key}) : super(key: key);
@@ -15,28 +21,99 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
-  int _selectedTabIndex = 0; // 0 for Explore, 1 for My Events
-  List<Event> events = [];
+  int _selectedTabIndex = 0;
+  List<OnGoingEventModel> events2 = [];
+  List<UpcomingEvent> events3 = [];
+  List<EnrolledEventModel> enroledEvent = [];
   bool isLoading = true;
+  bool isLoading2 = true;
+  bool isLoading1 = true;
+  bool isLoadingPast = true;
 
   @override
   void initState() {
     super.initState();
-    fetchEvents();
+    fetchUpEvents();
+    fetchUpcomingEvents();
+    fetchEnrolledEvents();
   }
 
-  Future<void> fetchEvents() async {
+  Future<void> fetchUpEvents() async {
+    print("Starting upcomings fetchEvents...");
+    setState(() {
+      isLoading2 = true;
+    });
+
     try {
-      List<Event> fetchedEvents = await EventServices.fetchOngoingEvents();
+      List<OnGoingEventModel> fetchedEvents =
+          await EventServices.fetchOngoingEvents();
+
+      print(
+          "Fetched Ongoing Events: ${fetchedEvents.map((event) => event.title).toList()}");
+
       setState(() {
-        events = fetchedEvents;
+        events2 = fetchedEvents;
+        isLoading2 = false;
+      });
+    } catch (e) {
+      print("Error fetching events: $e");
+
+      setState(() {
+        isLoading2 = false;
+      });
+    }
+  }
+
+  Future<void> fetchUpcomingEvents() async {
+    print("Starting upcoming events fetch...");
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      List<UpcomingEvent> fetchedEvents =
+          await EventServices.fetchUpcomingEvents();
+
+      print(
+          "Fetched Upcoming Events: ${fetchedEvents.map((event) => event.title).toList()}");
+
+      setState(() {
+        events3 = fetchedEvents;
         isLoading = false;
       });
-      print(" asdfasdfasdf    " +  fetchedEvents.toString());
     } catch (e) {
-      print(e);
+      print("Error fetching events: $e");
       setState(() {
         isLoading = false;
+      });
+    }
+  }
+   Future<void> fetchEnrolledEvents() async {
+    print("Starting enrolled events fetch...");
+
+    setState(() {
+      isLoading1 = true;
+    });
+
+    try {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+      String authToken = pref.getString("authToken")!;
+      print("token : " + authToken);
+
+      List<EnrolledEventModel>? fetchedEvents =
+          await EventServices.fetchEnrolledEvents(authToken);
+
+      print(
+          "Fetched Enrolled Events: ${fetchedEvents!.map((event) => event.title).toList()}");
+
+      setState(() {
+        enroledEvent = fetchedEvents!;
+        isLoading1 = false;
+      });
+    } catch (e) {
+      print("Error fetching enrolled events: $e");
+      setState(() {
+        isLoading1 = false;
       });
     }
   }
@@ -209,47 +286,50 @@ class _EventScreenState extends State<EventScreen> {
       );
     }
 
-    Widget upcomingEvents() {
-      return Container(
-        margin: const EdgeInsets.only(
-          top: 24,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-              ),
-              child: Text(
-                'Upcoming Events',
-                style: GoogleFonts.agdasima(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 13,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 24,
-              ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: events.map((item) => EventCard(item)).toList(),
-                ),
-              ),
-            )
-          ],
-        ),
-      );
-    }
+    // Widget upcomingEvents() {
+    //   return Container(
+    //     margin: const EdgeInsets.only(
+    //       top: 24,
+    //     ),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Padding(
+    //           padding: const EdgeInsets.symmetric(
+    //             horizontal: 24,
+    //           ),
+    //           child: Text(
+    //             'OnGoing Events',
+    //             style: GoogleFonts.agdasima(
+    //               fontSize: 28,
+    //               fontWeight: FontWeight.w600,
+    //               color: Colors.black,
+    //             ),
+    //           ),
+    //         ),
+    //         const SizedBox(
+    //           height: 13,
+    //         ),
+    //         isLoading
+    //             ? Padding(
+    //                 padding: const EdgeInsets.only(
+    //                   left: 24,
+    //                 ),
+    //                 child: SingleChildScrollView(
+    //                   scrollDirection: Axis.horizontal,
+    //                   child: Row(
+    //                     children:
+    //                         events2.map((item) => EventCard(item)).toList(),
+    //                   ),
+    //                 ),
+    //               )
+    //             : Text("No Event Available")
+    //       ],
+    //     ),
+    //   );
+    // }
 
-    Widget popularNow() {
+    Widget UpcomingEventClass() {
       return Container(
         margin: const EdgeInsets.only(
           top: 24,
@@ -262,7 +342,7 @@ class _EventScreenState extends State<EventScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Popular Now',
+                    'Upcoming Events',
                     style: GoogleFonts.agdasima(
                       fontSize: 28,
                       fontWeight: FontWeight.w600,
@@ -288,10 +368,60 @@ class _EventScreenState extends State<EventScreen> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                    children:
-                        populars.map((item) => PopularCard(item)).toList()),
+                    children: events3
+                        .map((item) => UpcomingEventWidget(item))
+                        .toList()),
               ),
             )
+          ],
+        ),
+      );
+    }
+
+    Widget pastEvents() {
+      return Container(
+        margin: const EdgeInsets.only(
+          top: 24,
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Past Events',
+                    style: GoogleFonts.agdasima(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Text(
+                      'See All',
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+           isLoadingPast ?  Padding(
+              padding: const EdgeInsets.only(
+                left: 24,
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                    children: events3
+                        .map((item) => PastEventCard(item))
+                        .toList()),
+              ),
+            ) : Text("No Past Events")
           ],
         ),
       );
@@ -329,7 +459,7 @@ class _EventScreenState extends State<EventScreen> {
             const SizedBox(
               height: 16,
             ),
-            Padding(
+          isLoading1 ?   Padding(
               padding: const EdgeInsets.only(
                 left: 24,
               ),
@@ -337,15 +467,15 @@ class _EventScreenState extends State<EventScreen> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                     children:
-                        populars.map((item) => PopularCard(item)).toList()),
+                        enroledEvent == null ? [ Text("No Enrolled Events")] : enroledEvent.map((item) => EnroledEventCard(item)).toList()),
               ),
-            )
+            ) : Text("No Enrolled Events")
           ],
         ),
       );
     }
 
-    Widget CompletedEvents() {
+    Widget OnGoingEvents() {
       return Container(
         margin: const EdgeInsets.only(
           top: 24,
@@ -358,7 +488,7 @@ class _EventScreenState extends State<EventScreen> {
                 horizontal: 24,
               ),
               child: Text(
-                'Complted Events',
+                'OnGoing Events',
                 style: GoogleFonts.agdasima(
                   fontSize: 28,
                   fontWeight: FontWeight.w600,
@@ -369,30 +499,31 @@ class _EventScreenState extends State<EventScreen> {
             const SizedBox(
               height: 13,
             ),
-                      isLoading
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 24),
-                  child: CircularProgressIndicator(), 
-                )
-              : events.isEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 24),
-                      child: Text('No events available', style: TextStyle(fontSize: 16)),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(left: 24),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: events.map((item) => EventCard(item)).toList(),
+            isLoading2
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 24),
+                    child: CircularProgressIndicator(),
+                  )
+                : events2.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: Text('No events available',
+                            style: TextStyle(fontSize: 16)),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 24),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children:
+                                events2.map((item) => EventCard(item)).toList(),
+                          ),
                         ),
-                      ),
-                    )
+                      )
           ],
         ),
       );
     }
-
     return Scaffold(
       backgroundColor: MyColors.ourBackground,
       body: SafeArea(
@@ -405,12 +536,12 @@ class _EventScreenState extends State<EventScreen> {
             _selectedTabIndex == 0
                 ? Column(
                     children: [
-                      upcomingEvents(),
-                      popularNow(),
+                      OnGoingEvents(),
+                      UpcomingEventClass(),
                     ],
                   )
                 : Column(
-                    children: [EnroledEvents(), CompletedEvents()],
+                    children: [EnroledEvents(), pastEvents()],
                   ),
           ],
         ),

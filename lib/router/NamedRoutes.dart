@@ -22,9 +22,14 @@ class StudentsRoutes {
   static String eventPage4 = "//student/eventPage4";
 }
 
+class AlumniRoutes {
+  static String dashboard = "/alumni/dashboard";
+}
+
 class FacultyRoutes {
   static String signUp = "/faculty/signUp";
   static String facultyHomePage = "/faculty/facultyHomePage";
+  static String facultyProfilePage = "/faculty/facultyProfilePage";
 }
 
 class CommonRoutes {

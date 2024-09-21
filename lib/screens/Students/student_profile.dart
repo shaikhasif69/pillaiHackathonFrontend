@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/widgets/seperatorLine.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -27,6 +29,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isReadOnly = true;
 
   final String title = "edit";
+  String _imageUrl = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      _nameController.text = prefs.getString('Profile_username') ?? 'John Doe';
+      _usernameController.text =
+          '@${prefs.getString('Profile_username') ?? 'johndoe'}';
+      _emailController.text =
+          prefs.getString('Profile_email') ?? 'john.doe@example.com';
+      _bioController.text =
+          'Passionate mobile developer and tech enthusiast.'; // You may customize this
+      _imageUrl = prefs.getString('Profile_imageUrl') ??
+          'assets/img_event_1.png'; // Load a default image if empty
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +141,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.01),
-                    Text("Change Profile Phote", textAlign: TextAlign.center, style: TextStyle(color: Colors.blue),),
+                    Text(
+                      "Change Profile Phote",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.blue),
+                    ),
                     SizedBox(height: screenHeight * 0.02),
-                  const MySeparator(color: Colors.black),
+                    const MySeparator(color: Colors.black),
                     SizedBox(height: screenHeight * 0.02),
                     // User stats (posts, followers, following)
                     Center(
@@ -132,29 +161,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     SizedBox(height: screenHeight * 0.02),
-                    Row(mainAxisAlignment: MainAxisAlignment.end,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isReadOnly = ! isReadOnly;
-                            });
-                            print("hit save api here!");
-                          },
-                          child: Text( isReadOnly ? title : "save" , style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),))
+                            onTap: () {
+                              setState(() {
+                                isReadOnly = !isReadOnly;
+                              });
+                              print("hit save api here!");
+                            },
+                            child: Text(
+                              isReadOnly ? title : "save",
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.w600),
+                            ))
                       ],
                     ),
-    
+
                     // Editable fields for name, username, website, and bio
                     _buildEditableField('Name', _nameController),
                     _buildEditableField('Username', _usernameController),
                     _buildEditableField('Website', _websiteController),
                     _buildEditableField('Bio', _bioController, maxLines: 3),
-    
+
                     SizedBox(height: 16),
                     Divider(), // Separator for sections
                     SizedBox(height: 16),
-    
+
                     // Private Information & Contact Information
                     Text('Private Information',
                         style: TextStyle(
@@ -162,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 8),
                     _buildEditableField('Email', _emailController),
                     _buildEditableField('Phone', _phoneController),
-    
+
                     // Gender field dropdown
                     _buildGenderDropdown(),
                   ],
@@ -205,7 +240,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             controller: controller,
             maxLines: maxLines,
             decoration: const InputDecoration(
-              //  suffixIcon: 
+              //  suffixIcon:
               //       IconButton(
               //           icon: Icon(
               //                Icons.edit

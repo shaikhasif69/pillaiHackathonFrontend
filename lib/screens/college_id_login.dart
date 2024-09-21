@@ -48,6 +48,7 @@ class _CollegeIdLoginPageState extends State<CollegeIdLoginPage> {
         GoRouter.of(context).pushReplacement(StudentsRoutes.studentHomePage);
       } else {
         await prefs.setString('userType', 'faculty');
+        GoRouter.of(context).pushReplacement(FacultyRoutes.facultyHomePage);
       }
     } else {
       print("error bro error");

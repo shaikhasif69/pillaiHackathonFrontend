@@ -48,7 +48,15 @@ class StudentServices {
         var data = json.decode(res.body);
         // dev.log(data.toString());
         // dev.log(data['facultyDetails'].toString());
-
+ // Store fetched data in SharedPreferences
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('Profile_username', data['username']);
+      await prefs.setString('Profile_email', data['email']);
+      await prefs.setString('Profile_imageUrl', data['imageUrl']);
+      await prefs.setString('Profile_communitiesCreated', data['communitiesCreated'].toString());
+      await prefs.setString('Profile_communitiesJoined', json.encode(data['communitiesJoined']));
+      await prefs.setString('Profile_posts', json.encode(data['posts']));
+      await prefs.setString('Profile_events', json.encode(data['events']));
         return User(
             username: data['username'],
             email: data['email'],
