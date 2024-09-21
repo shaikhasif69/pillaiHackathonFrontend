@@ -235,6 +235,24 @@ class _HomeScreen extends ConsumerState<Homescreen>
         ],
       ),
       body: pages[page],
+      // bottomNavigationBar: BottomNavigationBar(items: [
+      //   BottomNavigationBarItem(
+      //       icon: Icon(Icons.call),
+      //       label: 'Calls',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.call),
+      //       label: 'Calls',
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: Icon(Icons.call),
+      //       label: 'Calls',
+      //     ),BottomNavigationBarItem(
+      //   icon: Icon(Icons.call),
+      //   label: 'Calls',
+      // ),
+
+      // ],),
       // bottomNavigationBar: Transform.translate(
       //   offset: Offset(0, 100 * animation.value),
       //   child: SafeArea(
