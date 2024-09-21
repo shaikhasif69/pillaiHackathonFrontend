@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:pillai_hackcelestial/constant.dart';
 import 'package:pillai_hackcelestial/model/Disscussion.dart';
@@ -15,6 +16,7 @@ import 'dart:developer' as dev;
 import 'package:pillai_hackcelestial/model/user.dart';
 import 'package:pillai_hackcelestial/models/UserChatList.dart';
 import 'package:pillai_hackcelestial/models/chattingModel.dart';
+import 'package:pillai_hackcelestial/providers/ChatBotProvider.dart';
 import 'package:pillai_hackcelestial/screens/Chatin/chatList.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,6 +30,26 @@ class StudentServices {
     myId = pref.getString("_id")!;
 
     return null;
+  }
+
+  static Future<String> getChatBot(String s, WidgetRef ref) async {
+    try {
+      print("data");
+      var data = await http.post(Uri.parse(chatURl), body: {"question": s});
+      print(data.statusCode);
+      dev.log(data.body);
+      if (data.statusCode == 200) {
+        ref.read(chatBotProvider.notifier).isLoading = false;
+        ref.read(chatBotProvider.notifier).setState();
+        dev.log(data.body);
+        return json.decode(data.body)["output_text"];
+      }
+
+      return "Some Internal Error ";
+    } catch (e) {
+      print(e);
+      return "Some Internal Error ";
+    }
   }
 
   static Future<Map<String, String>> getHeaders() async {

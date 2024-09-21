@@ -25,10 +25,15 @@ class _ChattingPage extends ConsumerState<ChatBot> {
     setState(() {});
   }
 
+  void updated() {
+    setState(() {});
+  }
+
   @override
   void initState() {
     mySocketConnect.getChatinit(ref);
-
+    ref.read(chatBotProvider.notifier).setState = updated;
+    ref.read(chatBotProvider.notifier).isLoading = true;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // scr.jumpTo(value)
     });
@@ -147,15 +152,24 @@ class _ChattingPage extends ConsumerState<ChatBot> {
                     ),
                   ),
                   IconButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (msg.text != "") {
+                          String s = "";
                           setState(() {
                             ref
                                 .read(chatBotProvider.notifier)
                                 .data
                                 .add({"msg": msg.text, "user": "reciver"});
+                            s = msg.text;
                             msg.text = "";
+                            ref.read(chatBotProvider.notifier).isLoading = true;
                           });
+                          var res = await StudentServices.getChatBot(s, ref);
+                          ref.read(chatBotProvider.notifier).isLoading = false;
+                          ref
+                              .read(chatBotProvider.notifier)
+                              .data
+                              .add({"msg": res, "user": "sender"});
                         }
                       },
                       icon: Icon(Icons.send))
@@ -200,7 +214,7 @@ Widget SenderChatBUbble(BuildContext context, String data) {
                     child: Container(
                       // color: Colors.lightBlueAccent, // For visibility
                       child: Text(
-                        "",
+                        data,
                         style: TextStyle(fontSize: 16),
                         textAlign: TextAlign.start, // Center the text
                       ),
