@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -55,10 +56,11 @@ class _HomeScreen extends ConsumerState<Homescreen>
 
   Menu selectedBottonNav = bottomNavItems[0];
   List<IconData> icons = [
-    FontAwesomeIcons.home,
-    FontAwesomeIcons.envelope,
-    FontAwesomeIcons.clipboardCheck,
-    FontAwesomeIcons.user,
+    Icons.home,
+    CupertinoIcons.person_crop_rectangle,
+    CupertinoIcons.envelope,
+    CupertinoIcons.doc_on_clipboard,
+    CupertinoIcons.profile_circled,
   ];
 
   int page = 0;
@@ -76,8 +78,8 @@ class _HomeScreen extends ConsumerState<Homescreen>
       Dashboard(),
       MentorshipPage(),
       SearchPage(),
+      UserDashboardPage(),
       EventScreen(),
-      UserDashboardPage()
     ];
     return Scaffold(
       floatingActionButton: FloatingActionButton(

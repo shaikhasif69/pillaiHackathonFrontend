@@ -17,6 +17,7 @@ class StudentsRoutes {
   static String studentProfilePage = "/student/studentProfilePage";
   static String chatBot = "/student/chatBot";
   static String eventPage1 = "/student/eventPage1";
+  static String eventPage5 = "/student/eventPage5";
   static String eventPage2 = "/student/eventPage2";
   static String eventPage3 = "//student/eventPage3";
   static String eventPage4 = "//student/eventPage4";

@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pillai_hackcelestial/model/event_model.dart';
 import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
+import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 class EventCard extends StatelessWidget {
@@ -116,7 +118,10 @@ class EventCard extends StatelessWidget {
             width: double.infinity,
             height: 33,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                GoRouter.of(context)
+                    .pushNamed(StudentsRoutes.eventPage2, extra: event);
+              },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.amber,
                 shape: RoundedRectangleBorder(

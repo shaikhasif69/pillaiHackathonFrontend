@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
+import 'package:pillai_hackcelestial/model/onGoingEventMode.dart';
+import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class EventDescPage1 extends StatefulWidget {
-  const EventDescPage1({super.key});
+  final OnGoingEventModel data;
+  const EventDescPage1({required this.data, super.key});
 
   @override
   State<EventDescPage1> createState() => _EventDescPage1State();
@@ -15,25 +20,25 @@ class _EventDescPage1State extends State<EventDescPage1> {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: MyColors.eventDescBackground,
-        body: Column(
+    return Scaffold(
+      backgroundColor: MyColors.eventDescBackground,
+      body: Builder(builder: (context) {
+        return Column(
           children: [
             Container(
               height: screenHeight * 0.34,
               child: Stack(
                 children: [
                   // Image.asset("assets/theDots.png"),
-                   Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/theDots.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: null /* add child content here */,
-      ),
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage("assets/theDots.png"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: null /* add child content here */,
+                  ),
                   Column(
                     children: [
                       SizedBox(height: 15),
@@ -79,30 +84,42 @@ class _EventDescPage1State extends State<EventDescPage1> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Column(
-                            children: [
-                              Text(
-                                "Chess event",
-                                style: GoogleFonts.agdasima(
-                                    fontSize: 50,
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white),
-                              ),
-                              Text(
-                                "Chess event",
-                                style: GoogleFonts.agdasima(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.white),
-                              ),
-                            ],
+                          Expanded(
+                            flex: 60,
+                            child: Column(
+                              children: [
+                                Text(
+                                  widget.data.title,
+                                  style: GoogleFonts.agdasima(
+                                      fontSize: 50,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white),
+                                ),
+                                SizedBox(
+                                  height: 100,
+                                  child: Text(
+                                    widget.data.description,
+                                    style: GoogleFonts.agdasima(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: SizedBox.fromSize(
-                              size: Size.fromRadius(88),
-                              child: Image.asset('assets/img_event_1.png',
-                                  fit: BoxFit.cover),
+                          Expanded(
+                            flex: 40,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: SizedBox.fromSize(
+                                size: Size.fromRadius(88),
+                                child: widget.data.imageUrl != null ||
+                                        widget.data.imageUrl != ""
+                                    ? Image.network(widget.data.imageUrl)
+                                    : Image.asset('assets/img_event_1.png',
+                                        fit: BoxFit.cover),
+                              ),
                             ),
                           )
                         ],
@@ -126,30 +143,42 @@ class _EventDescPage1State extends State<EventDescPage1> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              "Chess event",
-                              style: GoogleFonts.agdasima(
-                                  fontSize: 34,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-                            Text(
-                              "Chess event",
-                              style: GoogleFonts.agdasima(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black),
-                            ),
-                          ],
+                        Expanded(
+                          flex: 60,
+                          child: Column(
+                            children: [
+                              Text(
+                                widget.data.title,
+                                style: GoogleFonts.agdasima(
+                                    fontSize: 34,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 100,
+                                child: Text(
+                                  widget.data.description,
+                                  style: GoogleFonts.agdasima(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: SizedBox.fromSize(
-                            size: Size.fromRadius(68),
-                            child: Image.asset('assets/img_event_1.png',
-                                fit: BoxFit.cover),
+                        Expanded(
+                          flex: 40,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: SizedBox.fromSize(
+                                size: Size.fromRadius(68),
+                                child: Image.asset('assets/img_event_1.png',
+                                    fit: BoxFit.cover),
+                              ),
+                            ),
                           ),
                         )
                       ],
@@ -157,68 +186,77 @@ class _EventDescPage1State extends State<EventDescPage1> {
                     SizedBox(
                       height: screenHeight * 0.05,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.location_on_outlined,
-                          size: 40,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Location : Pillai College of engineering",
-                          style: GoogleFonts.agdasima(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.location_on_outlined,
+                            size: 40,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Location : " + widget.data.location,
+                            style: GoogleFonts.agdasima(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.date_range,
-                          size: 40,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Location : Pillai College of engineering",
-                          style: GoogleFonts.agdasima(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.date_range,
+                            size: 40,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Date : " + widget.data.date,
+                            style: GoogleFonts.agdasima(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.timer,
-                          size: 40,
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          "Location : Pillai College of engineering",
-                          style: GoogleFonts.agdasima(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.timer,
+                            size: 40,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Time : " + widget.data.time,
+                            style: GoogleFonts.agdasima(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black),
+                          ),
+                        ],
+                      ),
                     ),
                     Container(
                       margin: EdgeInsets.only(
@@ -241,23 +279,30 @@ class _EventDescPage1State extends State<EventDescPage1> {
                         child: Text("many many text here!"),
                       ),
                     ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      width: MediaQuery.of(context).size.width * 0.3,
-                      decoration: BoxDecoration(
-                          color: MyColors.ourPrimary,
-                          borderRadius: BorderRadius.circular(15)),
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Done ",
-                                style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    letterSpacing: 1)),
-                          ],
+                    InkWell(
+                      onTap: () {
+                        GoRouter.of(context).pushNamed(
+                            StudentsRoutes.eventPage3,
+                            extra: widget.data);
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        decoration: BoxDecoration(
+                            color: MyColors.ourPrimary,
+                            borderRadius: BorderRadius.circular(15)),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Done ",
+                                  style: GoogleFonts.inter(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      letterSpacing: 1)),
+                            ],
+                          ),
                         ),
                       ),
                     )
@@ -266,8 +311,8 @@ class _EventDescPage1State extends State<EventDescPage1> {
               ),
             ))
           ],
-        ),
-      ),
+        );
+      }),
     );
   }
 }

@@ -16,7 +16,7 @@ class EventServices {
   final String baseUrl = urlAddress;
 
   static Future<List<OnGoingEventModel>> fetchOngoingEvents() async {
-    final String url = 'http://192.168.218.46:3000/build/getongoing';
+    final String url = urlAddress + "/build/getongoing";
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -39,7 +39,7 @@ class EventServices {
   }
 
   static Future<List<UpcomingEvent>> fetchUpcomingEvents() async {
-    final String url = 'http://192.168.218.46:3000/build/getupcoming';
+    final String url = urlAddress + '/build/getupcoming';
 
     try {
       print("Fetching upcoming events from $url...");
@@ -76,7 +76,7 @@ class EventServices {
 
   static Future<List<EnrolledEventModel>?> fetchEnrolledEvents(
       String authToken) async {
-    final String url = 'http://192.168.218.46:3000/build/enrolled-event';
+    final String url = urlAddress + '/build/enrolled-event';
 
     try {
       var header = await StudentServices.getHeaders();
