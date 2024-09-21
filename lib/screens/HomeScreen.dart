@@ -6,6 +6,8 @@ import 'package:pillai_hackcelestial/Socket/init.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/components/menu.dart';
 import 'package:pillai_hackcelestial/components/rive_assets.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+
 import 'package:pillai_hackcelestial/components/rive_utils.dart';
 import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 import 'package:pillai_hackcelestial/screens/Students/dashboard_page.dart';
@@ -19,6 +21,7 @@ import 'package:pillai_hackcelestial/widgets/btm_nav_item.dart';
 import 'package:pillai_hackcelestial/widgets/getCommuityListPorvider.dart';
 import 'package:pillai_hackcelestial/widgets/getFaclutyListProvider.dart';
 import 'package:pillai_hackcelestial/widgets/mentorCards.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Homescreen extends ConsumerStatefulWidget {
   @override
@@ -47,10 +50,17 @@ class _HomeScreen extends ConsumerState<Homescreen>
     scalAnimation = Tween<double>(begin: 1, end: 0.8).animate(CurvedAnimation(
         parent: _animationController, curve: Curves.fastOutSlowIn));
     super.initState();
-    // getUserDetails();+
+    // getUserDetails();
   }
 
   Menu selectedBottonNav = bottomNavItems[0];
+  List<IconData> icons = [
+    FontAwesomeIcons.home,
+    FontAwesomeIcons.envelope,
+    FontAwesomeIcons.clipboardCheck,
+    FontAwesomeIcons.user,
+  ];
+
   int page = 0;
 
   void updateSelectedBtmNav(Menu menu) {
@@ -235,72 +245,21 @@ class _HomeScreen extends ConsumerState<Homescreen>
         ],
       ),
       body: pages[page],
-      // bottomNavigationBar: BottomNavigationBar(items: [
-      //   BottomNavigationBarItem(
-      //       icon: Icon(Icons.call),
-      //       label: 'Calls',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.call),
-      //       label: 'Calls',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.call),
-      //       label: 'Calls',
-      //     ),BottomNavigationBarItem(
-      //   icon: Icon(Icons.call),
-      //   label: 'Calls',
-      // ),
-
-      // ],),
-      // bottomNavigationBar: Transform.translate(
-      //   offset: Offset(0, 100 * animation.value),
-      //   child: SafeArea(
-      //     child: Container(
-      //       padding:
-      //           const EdgeInsets.only(left: 12, top: 12, right: 12, bottom: 12),
-      //       margin: const EdgeInsets.symmetric(horizontal: 24),
-      //       decoration: BoxDecoration(
-      //         color: MyColors.ourPrimary.withOpacity(0.8),
-      //         borderRadius: const BorderRadius.all(Radius.circular(24)),
-      //         boxShadow: [
-      //           BoxShadow(
-      //             color: MyColors.backgroundColor2.withOpacity(0.3),
-      //             offset: const Offset(0, 20),
-      //             blurRadius: 20,
-      //           ),
-      //         ],
-      //       ),
-      //       child: Row(
-      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //         children: [
-      //           ...List.generate(
-      //             bottomNavs.length,
-      //             (index) {
-      //               Menu navBar = bottomNavItems[index];
-      //               return BtmNavItem(
-      //                 navBar: navBar,
-      //                 press: () {
-      //                   print('index: ' + index.toString());
-      //                   RiveUtils.chnageSMIBoolState(navBar.rive.status!);
-      //                   updateSelectedBtmNav(navBar);
-      //                   setState(() {
-      //                     page = index;
-      //                   });
-      //                 },
-      //                 riveOnInit: (artboard) {
-      //                   navBar.rive.status = RiveUtils.getRiveInput(artboard,
-      //                       stateMachineName: navBar.rive.stateMachineName);
-      //                 },
-      //                 selectedNav: selectedBottonNav,
-      //               );
-      //             },
-      //           ),
-      //         ],
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        icons: icons,
+        iconSize: 25,
+        activeIndex: page,
+        height: 65,
+        splashSpeedInMilliseconds: 300,
+        gapLocation: GapLocation.none,
+        activeColor: const Color.fromARGB(255, 0, 190, 165),
+        inactiveColor: const Color.fromARGB(255, 223, 219, 219),
+        onTap: (int tappedIndex) {
+          setState(() {
+            page = tappedIndex;
+          });
+        },
+      ),
     );
   }
 
