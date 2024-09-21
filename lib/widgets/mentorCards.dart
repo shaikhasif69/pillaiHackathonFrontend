@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pillai_hackcelestial/components/constant.dart';
 import 'package:pillai_hackcelestial/model/Faculty.dart';
+import 'package:pillai_hackcelestial/router/NamedRoutes.dart';
 
 class MentorCards extends ConsumerWidget {
   Faculty data;
@@ -74,10 +76,15 @@ class MentorCards extends ConsumerWidget {
                             color: MyColors.ourPrimary),
                         child: Padding(
                           padding: const EdgeInsets.all(6.0),
-                          child: Text(
-                            "View Profile",
-                            style: GoogleFonts.poppins(
-                                fontSize: 15, fontWeight: FontWeight.w300, color: Colors.white),
+                          child: GestureDetector(
+                            onTap: () {
+                              GoRouter.of(c).pushNamed(StudentsRoutes.mentorDesPage);
+                            },
+                            child: Text(
+                              "View Profile",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 15, fontWeight: FontWeight.w300, color: Colors.white),
+                            ),
                           ),
                         ),
                       ),

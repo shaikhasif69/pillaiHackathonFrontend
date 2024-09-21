@@ -135,6 +135,9 @@ class _HomeScreen extends ConsumerState<Homescreen>
               child: Column(
                 children: [
                   InkWell(
+                    onTap:(){
+                      GoRouter.of(context).pushNamed(StudentsRoutes.studentProfilePage);
+                    },
                     child: ListTile(
                       leading: Icon(Icons.file_copy),
                       title: Text(
@@ -283,10 +286,10 @@ class _HomeScreen extends ConsumerState<Homescreen>
               children: [
                 Text(
                   "Let's Build some Connections",
-                  style: GoogleFonts.abyssinicaSil(fontSize: 20),
+                  style: GoogleFonts.abyssinicaSil(fontSize: 16),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
+                  padding: const EdgeInsets.only(right: 15.0),
                   child: Text(
                     "View More",
                     style: TextStyle(color: MyColors.ourPrimary),

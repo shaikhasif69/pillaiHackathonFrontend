@@ -23,6 +23,7 @@ import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/even
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page3.dart';
 import 'package:pillai_hackcelestial/screens/Students/EventDescriptionPages/event_description_page4.dart';
 import 'package:pillai_hackcelestial/screens/Students/events_screen.dart';
+import 'package:pillai_hackcelestial/screens/Students/mentor_description_page.dart';
 import 'package:pillai_hackcelestial/screens/Students/multi_step_form.dart';
 import 'package:pillai_hackcelestial/screens/Students/student_profile.dart';
 import 'package:pillai_hackcelestial/screens/ask_loginPage.dart';
@@ -237,6 +238,12 @@ class MyGoRouter {
           d: d,
         );
       },
+    ),
+
+    GoRoute(
+      path: StudentsRoutes.mentorDesPage,
+      name: StudentsRoutes.mentorDesPage,
+      builder: (context, state) => MentorDescriptionPage(),
     ),
     GoRoute(
       path: StudentsRoutes.chattingList,

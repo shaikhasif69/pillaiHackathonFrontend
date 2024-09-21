@@ -21,10 +21,14 @@ class StudentsRoutes {
   static String eventPage2 = "/student/eventPage2";
   static String eventPage3 = "//student/eventPage3";
   static String eventPage4 = "//student/eventPage4";
+
+  static String mentorDesPage = "/student/mentorDes";
 }
 
 class AlumniRoutes {
-  static String dashboard = "/alumni/dashboard";
+  static String alumnDashboard = "/alumni/dashboard";
+  static String alumLogin = "/alumni/login";
+  // static 
 }
 
 class FacultyRoutes {
