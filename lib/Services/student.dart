@@ -36,6 +36,12 @@ class StudentServices {
     return {'Authorization': "Bearer " + token};
   }
 
+   static Future<Map<String, String>> getStaffHeaders() async {
+    pref = await SharedPreferences.getInstance();
+    String token = pref.getString("facultAuthToken")!;
+    return {'Authorization': "Bearer " + token};
+  }
+
   // static Map<String, String> header = {'Authorization': "Bearer " + token};
   static Future<User?> getUserData() async {
     try {

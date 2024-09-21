@@ -99,6 +99,7 @@ class AuthService {
           ),
         );
       } else {
+        print("token of faculty : " + token);
         SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('facultAuthToken', token);
       await prefs.setString("_fid", userId);
